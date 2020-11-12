@@ -5,8 +5,8 @@ public class Recurso {
     private Boolean enUso;
     
     public Recurso(String unNombre){
-        this.nombre = unNombre;
-        this.enUso = false;
+        this.setNombre(unNombre);
+        this.setEnUso(false);
     }
     
     public String getNombre() {

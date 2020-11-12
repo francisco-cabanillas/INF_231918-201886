@@ -4,7 +4,7 @@ public class Usuario {
     private String nombre;
     
     public Usuario(String unNombre){
-        this.nombre = unNombre;
+        this.setNombre(unNombre);
     }
     
     public String getNombre() {
