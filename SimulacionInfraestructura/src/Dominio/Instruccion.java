@@ -7,9 +7,9 @@ public class Instruccion {
     private List<Recurso> recursos;
     //private List<string> calculos;   a confirmar
     
-    public Instruccion(int unTiempo, List<Recurso> losRecursos){
+    public Instruccion(int unTiempo){
         this.setTiempo(unTiempo);
-        this.setRecursos(losRecursos);
+        //this.setRecursos(losRecursos);
     }    
     public int getTiempo() {
         return tiempo;

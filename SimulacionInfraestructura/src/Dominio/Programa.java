@@ -17,6 +17,10 @@ public class Programa {
     public Programa(List<Instruccion> unaEjecucion) {
         this.setEjecucion(unaEjecucion);
     }
+
+    public Programa() {
+        
+    }
     public List<Instruccion> getEjecucion() {
         return ejecucion;
     }

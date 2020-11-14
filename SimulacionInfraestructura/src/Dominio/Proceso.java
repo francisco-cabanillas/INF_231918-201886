@@ -7,6 +7,7 @@ public class Proceso {
     private int posicionEjecucion;
     private Usuario propiedad;
     private Programa programa;
+    private Recurso recurso;
     private int estado; //0 bloqueado, 1 en ejecucion, 3 listo.
     
     public Proceso(Usuario unUsuario, Programa unPrograma) {
@@ -54,6 +55,15 @@ public class Proceso {
    //     this.ejecucion = ejecucion;
    // }
 
+    public Recurso getRecurso() {
+        return recurso;
+    }
+
+    public void setRecurso(Recurso recurso) {
+        this.recurso = recurso;
+    }
+
+    
     public void setPrograma(Programa unPrograma) {
         this.programa = unPrograma;
     }
