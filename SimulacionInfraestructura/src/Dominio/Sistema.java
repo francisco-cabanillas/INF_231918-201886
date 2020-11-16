@@ -23,19 +23,9 @@ public class Sistema {
    private final int Quantum = 15;
    
    
-    Usuario usuario1 = new Usuario("usuario 1");
-           
-           Instruccion A = new Instruccion(2); //pide impresora
-           Instruccion B = new Instruccion(4); //usa impresora
-           Instruccion C = new Instruccion(2); //devuelve impresora
-           
-           Programa prog1 = new Programa();
-           prog1
-           
-           //agrega instrucciones al programa
-           programa1.getEjecucion().add(A);
-           programa1.getEjecucion().add(B);
-           programa1.getEjecucion().add(C);
+   public Sistema(){
+       
+   }
    
    
    public boolean solicitudEjecutarPrograma(Usuario unUsuario, Programa unPrograma){

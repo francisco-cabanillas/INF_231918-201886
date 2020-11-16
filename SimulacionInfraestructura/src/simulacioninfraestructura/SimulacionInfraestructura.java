@@ -26,6 +26,9 @@ public class SimulacionInfraestructura {
            Instruccion A = new Instruccion(2); //pide impresora
            Instruccion B = new Instruccion(4); //usa impresora
            Instruccion C = new Instruccion(2); //devuelve impresora
+           A.setTipo("pedir");
+           B.setTipo("usar");
+           C.setTipo("devolver");
            
            Programa programa1 = new Programa();
            Programa programa2 = new Programa();
@@ -67,24 +70,20 @@ public class SimulacionInfraestructura {
     private Boolean CorrerPrograma(Proceso proceso, int Quantum) {
         int tiempo = 0;
         Programa programa = proceso.getPrograma();
-        List<Instruccion> instrucciones = programa.getEjecucionesPendientes();
+        List<Instruccion> instrucciones = programa.getEjecucion();
         Iterator<Instruccion> it = instrucciones.iterator();
-        while(it.hasNext() && tiempo >= this.Quantum){
+        
+        while(it.hasNext() && tiempo >= Quantum){
             Instruccion instruccion = it.next();
             tiempo += instruccion.getTiempo();
             
-            //Validar el uso de recursos en la matriz
-            
-            if(instruccion.getRecurso() != null){
+            if(instruccion.getRecurso() != 0){
                 Boolean disponible = SolicitarRecurso(instruccion.getRecurso());
                 if(!disponible){
                     return false;
                 }
             }
-            //Validar el uso de recursos en la matriz
-            
-            
-            //Falta seguirlo creo
+           
         }
         if(programa.getEjecucionesPendientes().isEmpty()){
             return true;

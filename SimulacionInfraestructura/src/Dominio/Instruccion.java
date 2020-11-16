@@ -4,8 +4,9 @@ import java.util.List;
 
 public class Instruccion {
     private int tiempo;
-    private List<Recurso> recursos;
+    private int recurso;
     //private List<string> calculos;   a confirmar
+    private String tipo;
     
     public Instruccion(int unTiempo){
         this.setTiempo(unTiempo);
@@ -19,13 +20,14 @@ public class Instruccion {
         this.tiempo = tiempo;
     }
 
-    public List<Recurso> getRecursos() {
-        return recursos;
+    public int getRecurso() {
+        return recurso;
     }
 
-    public void setRecursos(List<Recurso> recursos) {
-        this.recursos = recursos;
+    public void setRecurso(int recurso) {
+        this.recurso = recurso;
     }
+    
     
     /*public boolean Correr(){
         boolean resultado = true;
@@ -33,4 +35,12 @@ public class Instruccion {
         
         return resultado;
     }*/
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
 }
