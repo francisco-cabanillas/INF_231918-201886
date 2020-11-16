@@ -6,12 +6,21 @@ public class Proceso {
     private int numero;
     private int posicionEjecucion;
     private Usuario propiedad;
-    private List<Instruccion> ejecucion;
+    private Programa programa;
+    private Recurso recurso;
+    private int estado; //0 bloqueado, 1 en ejecucion, 3 listo.
     
-    public Proceso(int unNumero, List<Instruccion> unaEjecucion) {
-        this.setNumero(unNumero);
+    public Proceso(Usuario unUsuario, Programa unPrograma) {
+      //el numero nose cual ponerle
         this.setPosicionEjecucion(0);
-        this.setEjecucion(unaEjecucion);
+        this.setPrograma(unPrograma);
+        this.setPropiedad(unUsuario);
+    }
+
+    public Proceso() {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.setNumero(0);
+        
     }
     
     public int getNumero() {
@@ -38,12 +47,35 @@ public class Proceso {
         this.propiedad = propiedad;
     }
 
-    public List<Instruccion> getEjecucion() {
-        return ejecucion;
+    //public List<Instruccion> getEjecucion() {
+      //  return ejecucion;
+    //}
+
+   // public void setEjecucion(List<Instruccion> ejecucion) {
+   //     this.ejecucion = ejecucion;
+   // }
+
+    public Recurso getRecurso() {
+        return recurso;
     }
 
-    public void setEjecucion(List<Instruccion> ejecucion) {
-        this.ejecucion = ejecucion;
+    public void setRecurso(Recurso recurso) {
+        this.recurso = recurso;
+    }
+
+    
+    public void setPrograma(Programa unPrograma) {
+        this.programa = unPrograma;
+    }
+    private Programa getPrograma() {
+        return programa;
+    }
+
+    public void setEstado(int unEstado) {
+        this.estado = unEstado;
+    }
+    public int getEstado() {
+        return estado;
     }
     
 }
