@@ -1,31 +1,44 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Dominio;
 
 import java.util.List;
 
-/**
- *
- * @author Paula Hernandez
- */
 public class Programa {
-    private List<Instruccion> ejecucion;
+    private List<Instruccion> instrucciones;
+    private List<Instruccion> instruccionesFinalizadas;
     
-    public Programa(List<Instruccion> unaEjecucion) {
-        this.setEjecucion(unaEjecucion);
+    public Programa(List<Instruccion> instrucciones) {
+        this.setInstrucciones(instrucciones);
     }
 
     public Programa() {
         
     }
-    public List<Instruccion> getEjecucion() {
-        return ejecucion;
+    
+
+    public List<Instruccion> getInstrucciones() {
+        return instrucciones;
     }
 
-    public void setEjecucion(List<Instruccion> ejecucion) {
-        this.ejecucion = ejecucion;
+    /*public void setEjecucionesPendientes(List<Instruccion> ejecucionPendiente) {
+        this.ejecuciones = ejecucionPendiente;
+    }
+
+    public List<Instruccion> getInstruccionesFinalizadas() {
+        return instruccionesFinalizadas;
+    }
+
+    public void setInstruccionesFinalizadas(List<Instruccion> instruccionesFinalizadas) {
+        this.instruccionesFinalizadas = instruccionesFinalizadas;
+    }
+    
+    
+    
+    public void FinalizarInstruccion(Instruccion instruccion){
+        instruccionesFinalizadas.add(instruccion);
+        ejecuciones.remove(instruccion);
+    } */
+
+    public void setInstrucciones(List<Instruccion> instrucciones) {
+        this.instrucciones = instrucciones;
     }
 }

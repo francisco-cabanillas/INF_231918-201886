@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Instruccion {
     private int tiempo;
-    private int recurso;
+    private Recurso recurso;
     //private List<string> calculos;   a confirmar
     private String tipo;
     
@@ -20,11 +20,11 @@ public class Instruccion {
         this.tiempo = tiempo;
     }
 
-    public int getRecurso() {
+    public Recurso getRecurso() {
         return recurso;
     }
 
-    public void setRecurso(int recurso) {
+    public void setRecurso(Recurso recurso) {
         this.recurso = recurso;
     }
     

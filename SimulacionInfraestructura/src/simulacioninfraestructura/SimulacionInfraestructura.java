@@ -19,6 +19,7 @@ public class SimulacionInfraestructura {
            //sis.solicitudEjecutarPrograma(unUsuario, unPrograma);
            //se ejecuta un programa
            
+           int Quantum = 15;
            ///////////////////////////////////////////////// agregue 2 procesos fijos al array (version 0)
            
            Usuario usuario1 = new Usuario("usuario 1");
@@ -34,13 +35,13 @@ public class SimulacionInfraestructura {
            Programa programa2 = new Programa();
 
            //agrega instrucciones al programa
-           programa1.getEjecucion().add(A);
-           programa1.getEjecucion().add(B);
-           programa1.getEjecucion().add(C);
+           programa1.getInstrucciones().add(A);
+           programa1.getInstrucciones().add(B);
+           programa1.getInstrucciones().add(C);
            
-           programa2.getEjecucion().add(A);
-           programa2.getEjecucion().add(B);
-           programa2.getEjecucion().add(C);
+           programa2.getInstrucciones().add(A);
+           programa2.getInstrucciones().add(B);
+           programa2.getInstrucciones().add(C);
            
            //verifico si se puede crear programa con la matriz programas if sis.solicitudEjecutarPrograma(usuario1, programa1)
            //verifico si ese usuario puede ejecutar todos los recursos de ese programa
@@ -62,36 +63,69 @@ public class SimulacionInfraestructura {
            
     }
     
-    public void CorrerProcesos(Sistema sis){
+    public void CorrerProcesos(Sistema sis, int Quantum){
         
+        
+        while(!sis.getProcesos().isEmpty()){
+           int posicion = 0;
+           //if(sis.getProcesos().get(posicion).getEstado() == 3){
+            Proceso proceso = sis.getProcesos().get(posicion);
+               
+            proceso.setEstado(1);              
+            CorrerPrograma(proceso, Quantum, sis);
+            
+       }
         
     }
     
-    private Boolean CorrerPrograma(Proceso proceso, int Quantum) {
+    private void CorrerPrograma(Proceso proceso, int Quantum, Sistema sis) {
         int tiempo = 0;
         Programa programa = proceso.getPrograma();
-        List<Instruccion> instrucciones = programa.getEjecucion();
+        int posicion = proceso.getPosicionEjecucion();
+        
+        List<Instruccion> instrucciones = programa.getEjecuciones();
         Iterator<Instruccion> it = instrucciones.iterator();
         
         while(it.hasNext() && tiempo >= Quantum){
             Instruccion instruccion = it.next();
             tiempo += instruccion.getTiempo();
-            
-            if(instruccion.getRecurso() != 0){
-                Boolean disponible = SolicitarRecurso(instruccion.getRecurso());
-                if(!disponible){
-                    return false;
-                }
+        
+            if(instruccion.getTipo() == "pide"){
+                    Boolean disponible = SolicitarRecurso(instruccion.getRecurso());
+                    if(!disponible){
+                        proceso.setEstado(0);
+                        proceso.setPosicionEjecucion(posicion);
+                        sis.getProcesosBloqueados().add(proceso);
+                        //return false;
+                    }
+            }else if(instruccion.getTipo() == "devuelve"){ //si se libera un recurso, pasa de los bloqueados a los listos
+                    sis.liberarRecurso(instruccion.getRecurso()); 
+                    //le pregunte a caffa si es solo mover el primero de la lista de bloqueados que tenga ese recurso, a la lista de listos o todos los que lo tengan 
+                    
+                    sis.moverAListosProcesosConEseRecurso(instruccion.getRecurso());
+            }else{
+                
             }
+            
            
+            proceso.setPosicionEjecucion(posicion ++);      
         }
-        if(programa.getEjecucionesPendientes().isEmpty()){
-            return true;
+        
+        if(!it.hasNext()){
+            sis.getProcesos().remove(proceso); //si logro hacer todas las instrucciones, elimina el proceso de la lista de procesos
+            //return true;
+        }else{ //se fue por timeout
+            sis.getProcesosListos().add(proceso);
+            //return false;
         }
-        else {
-            return false;
-        }
+        
+        
+        
+    }   
+        
         
     
     
 }
+    
+
