@@ -67,7 +67,7 @@ public class Proceso {
     public void setPrograma(Programa unPrograma) {
         this.programa = unPrograma;
     }
-    private Programa getPrograma() {
+    public Programa getPrograma() {
         return programa;
     }
 
