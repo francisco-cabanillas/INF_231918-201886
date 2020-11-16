@@ -6,6 +6,8 @@
 package Dominio;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 /**
  *
@@ -61,11 +63,79 @@ public class Sistema {
     }
    
     
-    //version 0: procesos fijos, todos = usuario, no hay recursos. Solo simulo cpu por timeout
-    public void CorrerProcesos(){
-        //se ingresa usuario
-        //se ingresa programa
+   public void correrProcesos(int Quantum){
         
+        
+        while(!this.getProcesos().isEmpty()){
+           int posicion = 0;
+           //if(sis.getProcesos().get(posicion).getEstado() == 3){
+            Proceso proceso = this.getProcesos().get(posicion);
+               
+            proceso.setEstado(1);              
+            correrPrograma(proceso, Quantum);
+            
+       }
+        
+    }
+    
+    private void correrPrograma(Proceso proceso, int Quantum) {
+        int tiempo = 0;
+        Programa programa = proceso.getPrograma();
+        int posicion = proceso.getPosicionEjecucion();
+        
+        List<Instruccion> instrucciones = programa.getInstrucciones();
+        Iterator<Instruccion> it = instrucciones.iterator();
+        
+        while(it.hasNext() && tiempo >= Quantum){
+            Instruccion instruccion = it.next();
+            tiempo += instruccion.getTiempo();
+            System.out.println(programa.getInstrucciones().get(posicion).getMensaje());
+        
+          //  if(instruccion.getTipo() == "pide"){
+                    //Boolean disponible = sis.SolicitarRecurso(instruccion.getRecurso());
+                    
+                    //if(!disponible){
+                        proceso.setEstado(0);
+                        proceso.setPosicionEjecucion(posicion);
+                        this.getProcesosBloqueados().add(proceso);
+                        //return;
+                        
+                    //}
+                    
+          //  }else if(instruccion.getTipo() == "devuelve"){ //si se libera un recurso, pasa de los bloqueados a los listos
+                  //  sis.liberarRecurso(instruccion.getRecurso()); 
+                    //le pregunte a caffa si es solo mover el primero de la lista de bloqueados que tenga ese recurso, a la lista de listos o todos los que lo tengan 
+                    
+                 //   sis.moverAListosProcesosConEseRecurso(instruccion.getRecurso());
+         //   }else{
+                
+         //   }
+            
+           
+            proceso.setPosicionEjecucion(posicion ++);      
+        }
+        
+        if(!it.hasNext()){
+            this.getProcesos().remove(proceso); //si logro hacer todas las instrucciones, elimina el proceso de la lista de procesos
+            //return true;
+        }else{ //se fue por timeout
+            this.getProcesosListos().add(proceso);
+            //return false;
+            System.out.println( "proceso"+ proceso.getNumero() +"CPU perdido por timeOut");
+        }
+        
+        
+        
+    }   
+    
+    public Boolean SolicitarRecurso(Recurso recurso) {
+        Iterator<Recurso> it = this.getRecursos().iterator();
+        while(it.hasNext()){
+            if(it == recurso){
+                return recurso.getDisponible(); 
+            }
+        }
+        return false;
     }
     
     /*
@@ -168,5 +238,7 @@ public class Sistema {
         
     }
     */
+
+    
    
 }

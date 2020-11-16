@@ -31,6 +31,10 @@ public class SimulacionInfraestructura {
            B.setTipo("usar");
            C.setTipo("devolver");
            
+           A.setMensaje("Pedir impresora");
+           B.setMensaje("usar impresora");
+           C.setMensaje("devolver impresora");
+           
            Programa programa1 = new Programa();
            Programa programa2 = new Programa();
 
@@ -49,6 +53,9 @@ public class SimulacionInfraestructura {
            Proceso proc1 = new Proceso(usuario1, programa1);
            Proceso proc2 = new Proceso(usuario1, programa2);
            
+           proc1.setNumero(1);
+           proc2.setNumero(2);
+           
            proc1.setEstado(3); //3 = listo.
            proc1.setPosicionEjecucion(0);
             
@@ -58,70 +65,13 @@ public class SimulacionInfraestructura {
            sis.getProcesosListos().add(proc1);
            sis.getProcesosListos().add(proc2);
            ////////////////////////////////////////////////////////
+           sis.correrProcesos(15);
            
            
            
     }
     
-    public void CorrerProcesos(Sistema sis, int Quantum){
-        
-        
-        while(!sis.getProcesos().isEmpty()){
-           int posicion = 0;
-           //if(sis.getProcesos().get(posicion).getEstado() == 3){
-            Proceso proceso = sis.getProcesos().get(posicion);
-               
-            proceso.setEstado(1);              
-            CorrerPrograma(proceso, Quantum, sis);
-            
-       }
-        
-    }
     
-    private void CorrerPrograma(Proceso proceso, int Quantum, Sistema sis) {
-        int tiempo = 0;
-        Programa programa = proceso.getPrograma();
-        int posicion = proceso.getPosicionEjecucion();
-        
-        List<Instruccion> instrucciones = programa.getEjecuciones();
-        Iterator<Instruccion> it = instrucciones.iterator();
-        
-        while(it.hasNext() && tiempo >= Quantum){
-            Instruccion instruccion = it.next();
-            tiempo += instruccion.getTiempo();
-        
-            if(instruccion.getTipo() == "pide"){
-                    Boolean disponible = SolicitarRecurso(instruccion.getRecurso());
-                    if(!disponible){
-                        proceso.setEstado(0);
-                        proceso.setPosicionEjecucion(posicion);
-                        sis.getProcesosBloqueados().add(proceso);
-                        //return false;
-                    }
-            }else if(instruccion.getTipo() == "devuelve"){ //si se libera un recurso, pasa de los bloqueados a los listos
-                    sis.liberarRecurso(instruccion.getRecurso()); 
-                    //le pregunte a caffa si es solo mover el primero de la lista de bloqueados que tenga ese recurso, a la lista de listos o todos los que lo tengan 
-                    
-                    sis.moverAListosProcesosConEseRecurso(instruccion.getRecurso());
-            }else{
-                
-            }
-            
-           
-            proceso.setPosicionEjecucion(posicion ++);      
-        }
-        
-        if(!it.hasNext()){
-            sis.getProcesos().remove(proceso); //si logro hacer todas las instrucciones, elimina el proceso de la lista de procesos
-            //return true;
-        }else{ //se fue por timeout
-            sis.getProcesosListos().add(proceso);
-            //return false;
-        }
-        
-        
-        
-    }   
         
         
     

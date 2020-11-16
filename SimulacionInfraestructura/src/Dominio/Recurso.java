@@ -2,11 +2,11 @@ package Dominio;
 
 public class Recurso {
     private String nombre;
-    private Boolean enUso;
+    private Boolean disponible;
     
     public Recurso(String unNombre){
         this.setNombre(unNombre);
-        this.setEnUso(false);
+        this.setDisponible(false);
     }
     
     public String getNombre() {
@@ -17,12 +17,12 @@ public class Recurso {
         this.nombre = nombre;
     }
 
-    public Boolean getEnUso() {
-        return enUso;
+    public Boolean getDisponible() {
+        return disponible;
     }
 
-    public void setEnUso(Boolean enUso) {
-        this.enUso = enUso;
+    public void setDisponible(Boolean enUso) {
+        this.disponible = disponible;
     }
     
 }

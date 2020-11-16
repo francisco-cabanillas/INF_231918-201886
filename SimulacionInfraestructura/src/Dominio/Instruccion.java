@@ -7,6 +7,7 @@ public class Instruccion {
     private Recurso recurso;
     //private List<string> calculos;   a confirmar
     private String tipo;
+    private String mensaje;
     
     public Instruccion(int unTiempo){
         this.setTiempo(unTiempo);
@@ -43,4 +44,14 @@ public class Instruccion {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+    
+    
 }
