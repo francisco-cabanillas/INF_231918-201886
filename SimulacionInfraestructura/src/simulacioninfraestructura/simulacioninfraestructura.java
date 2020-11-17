@@ -13,9 +13,8 @@ import java.util.List;
 
 public class simulacioninfraestructura {
 
+   
     public static void main(String[] args) {
-        
-           
         
            Sistema sis = new Sistema();
 
@@ -29,7 +28,7 @@ public class simulacioninfraestructura {
            Usuario usuario1 = new Usuario("usuario 1");
            
            Instruccion A = new Instruccion(2); //pide impresora
-           Instruccion B = new Instruccion(10); //usa impresora
+           Instruccion B = new Instruccion(4); //usa impresora
            Instruccion C = new Instruccion(2); //devuelve impresora
            A.setTipo("pedir");
            B.setTipo("usar");
@@ -47,12 +46,17 @@ public class simulacioninfraestructura {
            //agrega instrucciones al programa
            programa1.getInstrucciones().add(A);
            programa1.getInstrucciones().add(B);
-           programa1.getInstrucciones().add(C);
+           programa1.getInstrucciones().add(B);
+           programa1.getInstrucciones().add(B);
+           programa1.getInstrucciones().add(B);
+           programa1.getInstrucciones().add(B);
+           programa1.getInstrucciones().add(B);
+           programa1.getInstrucciones().add(B);
            
            programa2.getInstrucciones().add(A);
            programa2.getInstrucciones().add(B);
            programa2.getInstrucciones().add(C);
-           
+
            //verifico si se puede crear programa con la matriz programas if sis.solicitudEjecutarPrograma(usuario1, programa1)
            //verifico si ese usuario puede ejecutar todos los recursos de ese programa
            //si se puede, se crea el proceso
@@ -72,16 +76,15 @@ public class simulacioninfraestructura {
            sis.getProcesos().add(proc2);
            ////////////////////////////////////////////////////////
            sis.correrProcesos(8);
+
+           System.out.println("el array procesos listos tiene "+sis.getProcesosListos().size());
+           System.out.println("el array procesos  tiene "+sis.getProcesos().size());
            
-           
-           
-    }
-    
     
         
         
     
     
-}
+    }}
     
 

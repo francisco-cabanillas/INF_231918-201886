@@ -13,7 +13,9 @@ import java.util.List;
  *
  * @author Paula Hernandez
  */
-public class Sistema { private final ArrayList<Usuario> usuarios;
+public class Sistema { 
+    
+   private final ArrayList<Usuario> usuarios;
    private final ArrayList<Recurso> recursos;
    private final ArrayList<Programa> programas;
    
@@ -72,16 +74,26 @@ public class Sistema { private final ArrayList<Usuario> usuarios;
     
    public void correrProcesos(int Quantum){
         
-    System.out.println( this.getProcesos().get(0));
+        //relleno el aray de procesosListos
+        for (int i=0;i<this.procesos.size();i++) {
+      
+            this.procesosListos.add(this.procesos.get(i));      
+        }
+
+        int posicion = 0;
         while(!this.getProcesos().isEmpty()){
-           int posicion = 0;
-          
-            Proceso proceso = this.getProcesos().get(posicion);
+
+            while(!this.getProcesosListos().isEmpty()){
+                Proceso proceso = this.getProcesosListos().get(0);
                
-            proceso.setEstado(1);              
-            correrPrograma(proceso, Quantum);
+                proceso.setEstado(1);              
+                correrPrograma(proceso, Quantum);
+                posicion++;
+            }
             
        }
+
+      
         
     }
     
@@ -93,19 +105,20 @@ public class Sistema { private final ArrayList<Usuario> usuarios;
         
         List<Instruccion> instrucciones = programa.getInstrucciones();
         Iterator<Instruccion> it = instrucciones.iterator();
-        
-        while(it.hasNext() && tiempo <= Quantum){
+        while(it.hasNext() && tiempo <= Quantum){ 
             Instruccion instruccion = it.next();
             tiempo += instruccion.getTiempo();
-            System.out.println(programa.getInstrucciones().get(posicion).getMensaje());
+           // System.out.println(programa.getInstrucciones().get(posicion).getMensaje());
         
           //  if(instruccion.getTipo() == "pide"){
                     //Boolean disponible = sis.SolicitarRecurso(instruccion.getRecurso());
                     
                     //if(!disponible){
+
                         proceso.setEstado(0);
                         proceso.setPosicionEjecucion(posicion);
                         this.getProcesosBloqueados().add(proceso);
+
                         //return;
                         
                     //}
@@ -120,21 +133,45 @@ public class Sistema { private final ArrayList<Usuario> usuarios;
          //   }
             
            
-            proceso.setPosicionEjecucion(posicion ++);      
+            proceso.setPosicionEjecucion(posicion++);      
         }
         
-        if(!it.hasNext()){
-            this.getProcesos().remove(proceso); //si logro hacer todas las instrucciones, elimina el proceso de la lista de procesos
-            //return true;
-        }else{ //si si tiene siguiente, se fue por timeout
-            this.getProcesosListos().add(proceso);
-            //return false;
-            System.out.println( "proceso"+ proceso.getNumero() +"CPU perdido por timeOut");
+        if(!it.hasNext()){ //logro hacer todas las instrucciones
+            this.getProcesosListos().remove(proceso); 
+            this.getProcesos().remove(proceso); 
+           
+        }else{ //se fue por timeout
+            System.out.println( "proceso"+ proceso.getNumero() +"CPU perdido por timeOut en posicion"+ proceso.getPosicionEjecucion());
+            //lo elimina de la primer posicion de los listos y lo agrega en la ultima 
+            this.getProcesosListos().remove(proceso);
+
+            eliminarInstruccionesYaEjecutadas(proceso.getPrograma().getInstrucciones(), proceso.getPosicionEjecucion());
+            proceso.setPosicionEjecucion(0);
+            int ultimoIndex = getUltimoIndex(this.getProcesosListos());
+            this.getProcesosListos().add(ultimoIndex, proceso); //lo agrega ultimo, pero con menos instrucciones.
+            
+            
         }
         
         
         
     }   
+
+
+    private static void eliminarInstruccionesYaEjecutadas(List<Instruccion> instrucciones, int ultimaPosicion){
+
+        for (int i=0; i<ultimaPosicion; i++) {
+            instrucciones.remove(i);
+            
+        }
+    }
+
+    private static int getUltimoIndex(List<Proceso> list){ 
+        if(list != null) {
+            return list.size();
+        }
+        return -1;
+    }
     
     public Boolean SolicitarRecurso(Recurso recurso) {
         Iterator<Recurso> it = this.getRecursos().iterator();
@@ -145,109 +182,6 @@ public class Sistema { private final ArrayList<Usuario> usuarios;
         }
         return false;
     }
-    
-    /*
-    
-    
-   private final int Quantum = 15;
-   
-   public void CorrerProcesos(){
-       while(!procesos.isEmpty()){
-           int posicion = 0;
-           if(procesos.get(posicion).getEstado() == 3){
-               Proceso proceso = procesos.get(posicion);
-               proceso.setEstado(1);
-               Boolean finalizo = CorrerPrograma(proceso);
-               if(finalizo){
-                   FinalizarProceso(proceso);
-               } else {
-                   proceso.setEstado(0);
-                   
-               }
-           }
-           if(procesos.size() == posicion+1){
-               posicion = 0;
-           } else {
-               posicion++;
-           }
-           if(posicion == 0){
-               ValidarEstados();
-           }
-       }
-   }
-   
-   public void FinalizarProceso(Proceso proceso){
-       procesosFinalizados.add(proceso);
-       procesos.remove(proceso);
-   }
-   
-   public boolean solicitudEjecutarPrograma(Usuario unUsuario, Programa unPrograma){
-        //1. se chequea en matriz de Usuario-Programa (si el usuario puede usar ese programa)
-        //2. se chequea en matriz Usuario-recursos (si el usuario puede usar todos los recursos que estan en ese programa)
-        
-        boolean puedeCrear = true;
-        return puedeCrear;        
-    }
-   
-   //A confir
-   public Boolean SolicitarRecurso(Recurso recurso){
-       if(recurso.getEnUso()){
-           return false;
-       } else {
-           recurso.setEnUso(Boolean.TRUE);
-       }
-       return true;
-   }
-   public void DevolverRecurso(Recurso recurso){
-       recurso.setEnUso(Boolean.FALSE);
-   }
-
-
-    private Boolean CorrerPrograma(Proceso proceso) {
-        int tiempo = 0;
-        Programa programa = proceso.getPrograma();
-        List<Instruccion> instrucciones = programa.getEjecucionesPendientes();
-        Iterator<Instruccion> it = instrucciones.iterator();
-        while(it.hasNext() && tiempo >= this.Quantum){
-            Instruccion instruccion = it.next();
-            tiempo += instruccion.getTiempo();
-            
-            //Validar el uso de recursos en la matriz
-            
-            if(instruccion.getRecurso() != null){
-                Boolean disponible = SolicitarRecurso(instruccion.getRecurso());
-                if(!disponible){
-                    return false;
-                }
-            }
-            //Validar el uso de recursos en la matriz
-            
-            
-            //Falta seguirlo creo
-        }
-        if(programa.getEjecucionesPendientes().isEmpty()){
-            return true;
-        }
-        else {
-            return false;
-        }
-        
-    }
-
-    private void ValidarEstados() {
-        Iterator<Proceso> it = procesos.iterator();
-        while(it.hasNext()){
-            Proceso proceso = it.next();
-            Recurso recursoEnEspera = proceso.getRecursoEnEspera();
-            if(!recursoEnEspera.getEnUso()){
-                proceso.setEstado(3);
-            }
-        }
-        
-    }
-    */
-
-
     
    
 }
