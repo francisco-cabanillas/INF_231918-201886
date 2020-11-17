@@ -1,4 +1,4 @@
-package simulacioninfraestructura;
+package SimulacionInfraestructura;
 
 
 import Dominio.Instruccion;
@@ -10,11 +10,15 @@ import static java.lang.System.console;
 import java.util.Iterator;
 import java.util.List;
 
-public class SimulacionInfraestructura {
+
+public class simulacioninfraestructura {
 
     public static void main(String[] args) {
         
+           
+        
            Sistema sis = new Sistema();
+
            //se crea un programa con un usuario y un proceso
            //sis.solicitudEjecutarPrograma(unUsuario, unPrograma);
            //se ejecuta un programa
@@ -25,11 +29,13 @@ public class SimulacionInfraestructura {
            Usuario usuario1 = new Usuario("usuario 1");
            
            Instruccion A = new Instruccion(2); //pide impresora
-           Instruccion B = new Instruccion(4); //usa impresora
+           Instruccion B = new Instruccion(10); //usa impresora
            Instruccion C = new Instruccion(2); //devuelve impresora
            A.setTipo("pedir");
            B.setTipo("usar");
            C.setTipo("devolver");
+
+           
            
            A.setMensaje("Pedir impresora");
            B.setMensaje("usar impresora");
@@ -62,10 +68,10 @@ public class SimulacionInfraestructura {
            proc2.setEstado(3); //3 = listo.
            proc2.setPosicionEjecucion(0);
            
-           sis.getProcesosListos().add(proc1);
-           sis.getProcesosListos().add(proc2);
+           sis.getProcesos().add(proc1);
+           sis.getProcesos().add(proc2);
            ////////////////////////////////////////////////////////
-           sis.correrProcesos(15);
+           sis.correrProcesos(8);
            
            
            

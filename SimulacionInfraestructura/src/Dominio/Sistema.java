@@ -13,20 +13,27 @@ import java.util.List;
  *
  * @author Paula Hernandez
  */
-public class Sistema {
-   private final ArrayList<Usuario> usuarios = new ArrayList<>();
-   private final ArrayList<Recurso> recursos = new ArrayList<>();
-   private final ArrayList<Programa> programas = new ArrayList<>();
+public class Sistema { private final ArrayList<Usuario> usuarios;
+   private final ArrayList<Recurso> recursos;
+   private final ArrayList<Programa> programas;
    
-   private final ArrayList<Proceso> procesos = new ArrayList<>(); //procesos (con su estado y posicionEjecucion)
-   private final ArrayList<Proceso> procesosListos = new ArrayList<>(); //procesos listos en orden, para ejecutsr el siguiente en la lista
-   private final ArrayList<Proceso> procesosBloqueados = new ArrayList<>(); //procesos bloqueados (sin orden)
+   private final ArrayList<Proceso> procesos; //procesos (con su estado y posicionEjecucion)
+   private final ArrayList<Proceso> procesosListos; //procesos listos en orden, para ejecutsr el siguiente en la lista
+   private final ArrayList<Proceso> procesosBloqueados; //procesos bloqueados (sin orden)
                                                                             //esperan eventos para ser desbloqueados.
    private final int Quantum = 15;
    
    
    public Sistema(){
-       
+
+    this.usuarios = new ArrayList<>();
+    this.recursos = new ArrayList<>();
+    this.programas = new ArrayList<>();
+    
+    this.procesos = new ArrayList<>(); //procesos (con su estado y posicionEjecucion)
+    this.procesosListos = new ArrayList<>(); //procesos listos en orden, para ejecutsr el siguiente en la lista
+    this.procesosBloqueados = new ArrayList<>(); //procesos bloqueados (sin orden)
+                                                                             //esperan eventos para ser desbloqueados.
    }
    
    
@@ -65,10 +72,10 @@ public class Sistema {
     
    public void correrProcesos(int Quantum){
         
-        
+    System.out.println( this.getProcesos().get(0));
         while(!this.getProcesos().isEmpty()){
            int posicion = 0;
-           //if(sis.getProcesos().get(posicion).getEstado() == 3){
+          
             Proceso proceso = this.getProcesos().get(posicion);
                
             proceso.setEstado(1);              
@@ -79,6 +86,7 @@ public class Sistema {
     }
     
     private void correrPrograma(Proceso proceso, int Quantum) {
+        System.out.println( "correr programa");
         int tiempo = 0;
         Programa programa = proceso.getPrograma();
         int posicion = proceso.getPosicionEjecucion();
@@ -86,7 +94,7 @@ public class Sistema {
         List<Instruccion> instrucciones = programa.getInstrucciones();
         Iterator<Instruccion> it = instrucciones.iterator();
         
-        while(it.hasNext() && tiempo >= Quantum){
+        while(it.hasNext() && tiempo <= Quantum){
             Instruccion instruccion = it.next();
             tiempo += instruccion.getTiempo();
             System.out.println(programa.getInstrucciones().get(posicion).getMensaje());
@@ -118,7 +126,7 @@ public class Sistema {
         if(!it.hasNext()){
             this.getProcesos().remove(proceso); //si logro hacer todas las instrucciones, elimina el proceso de la lista de procesos
             //return true;
-        }else{ //se fue por timeout
+        }else{ //si si tiene siguiente, se fue por timeout
             this.getProcesosListos().add(proceso);
             //return false;
             System.out.println( "proceso"+ proceso.getNumero() +"CPU perdido por timeOut");
@@ -238,6 +246,7 @@ public class Sistema {
         
     }
     */
+
 
     
    
