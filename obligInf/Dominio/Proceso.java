@@ -6,7 +6,8 @@ public class Proceso {
     private int posicionEjecucion;
     private Usuario propiedad;
     private Programa programa;
-    private Recurso recurso;
+    private Recurso recursoEnUso;
+    private Recurso recursoEnEspera;
     private int estado; //0 bloqueado, 1 en ejecucion, 3 listo.
     
     public Proceso(Usuario unUsuario, Programa unPrograma) {
@@ -14,6 +15,8 @@ public class Proceso {
         this.setPosicionEjecucion(0);
         this.setPrograma(unPrograma);
         this.setPropiedad(unUsuario);
+        this.setEstado(3);
+        this.setPosicionEjecucion(0);
     }
 
     public Proceso() {
@@ -52,14 +55,21 @@ public class Proceso {
    //     this.ejecucion = ejecucion;
    // }
 
-    public Recurso getRecurso() {
-        return recurso;
+    public Recurso getRecursoEnUso() {
+        return recursoEnUso;
     }
 
-    public void setRecurso(Recurso recurso) {
-        this.recurso = recurso;
+    public void setRecursoEnUso(Recurso recurso) {
+        this.recursoEnUso = recurso;
     }
 
+    public Recurso getRecursoEnEspera() {
+        return recursoEnEspera;
+    }
+
+    public void setRecursoEnEspera(Recurso recurso) {
+        this.recursoEnEspera = recurso;
+    }
     
     public void setPrograma(Programa unPrograma) {
         this.programa = unPrograma;
@@ -73,6 +83,11 @@ public class Proceso {
     }
     public int getEstado() {
         return estado;
+    }
+
+    @Override
+    public String toString(){
+        return "" + this.numero;
     }
     
 }

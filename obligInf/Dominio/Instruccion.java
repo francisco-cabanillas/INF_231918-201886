@@ -52,5 +52,8 @@ public class Instruccion {
         this.mensaje = mensaje;
     }
     
-    
+    @Override
+    public String toString(){
+        return this.mensaje;
+    }
 }
