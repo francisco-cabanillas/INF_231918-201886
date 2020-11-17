@@ -137,13 +137,14 @@ public class Sistema {
         }
         
         if(!it.hasNext()){ //logro hacer todas las instrucciones
+            System.out.println( "proceso"+ proceso.getNumero() +"se ejecuto completamente");
             this.getProcesosListos().remove(proceso); 
             this.getProcesos().remove(proceso); 
            
         }else{ //se fue por timeout
             System.out.println( "proceso"+ proceso.getNumero() +"CPU perdido por timeOut en posicion"+ proceso.getPosicionEjecucion());
             //lo elimina de la primer posicion de los listos y lo agrega en la ultima 
-            this.getProcesosListos().remove(proceso);
+            this.getProcesosListos().remove(0); //que solo elimine uno
 
             eliminarInstruccionesYaEjecutadas(proceso.getPrograma().getInstrucciones(), proceso.getPosicionEjecucion());
             proceso.setPosicionEjecucion(0);
