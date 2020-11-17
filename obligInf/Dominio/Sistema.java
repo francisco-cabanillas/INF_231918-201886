@@ -1,18 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Dominio;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- *
- * @author Paula Hernandez
- */
 public class Sistema {
    private final ArrayList<Usuario> usuarios;
    private final ArrayList<Recurso> recursos;
@@ -97,7 +88,7 @@ public class Sistema {
     }
     
     private void correrPrograma(Proceso proceso, int Quantum) {
-        System.out.println( "correr programa");
+        System.out.println("Correr programa");
         int tiempo = 0;
         Programa programa = proceso.getPrograma();
         int posicion = proceso.getPosicionEjecucion();
@@ -107,7 +98,7 @@ public class Sistema {
         while(it.hasNext() && tiempo <= Quantum){ 
             Instruccion instruccion = it.next();
             tiempo += instruccion.getTiempo();
-           System.out.println(programa.getInstrucciones().get(posicion).getMensaje());
+            System.out.println(programa.getInstrucciones().get(posicion).getMensaje());
         
           //  if(instruccion.getTipo() == "pide"){
                     //Boolean disponible = sis.SolicitarRecurso(instruccion.getRecurso());
@@ -136,12 +127,12 @@ public class Sistema {
         }
         
         if(!it.hasNext()){ //logro hacer todas las instrucciones
-            System.out.println( "proceso"+ proceso.getNumero() +"se ejecuto completamente");
+            System.out.println( "Proceso "+ proceso.getNumero() +" se ejecuto completamente.");
             this.getProcesosListos().remove(proceso); 
             this.getProcesos().remove(proceso); 
            
         }else{ //se fue por timeout
-            System.out.println( "proceso"+ proceso.getNumero() +"CPU perdido por timeOut en posicion"+ proceso.getPosicionEjecucion());
+            System.out.println("Proceso "+ proceso.getNumero() +" perdio CPU por timeOut en posicion "+ proceso.getPosicionEjecucion());
             //lo elimina de la primer posicion de los listos y lo agrega en la ultima 
             this.getProcesosListos().remove(0); //que solo elimine uno
 
