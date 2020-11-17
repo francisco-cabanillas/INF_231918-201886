@@ -28,15 +28,15 @@ public class SimulacionInfraestructura {
            Instruccion A = new Instruccion(2); //pide impresora
            Instruccion B = new Instruccion(4); //usa impresora
            Instruccion C = new Instruccion(2); //devuelve impresora
-           A.setTipo("pedir");
-           B.setTipo("usar");
-           C.setTipo("devolver");
+           A.setTipo("Pedir");
+           B.setTipo("Usar");
+           C.setTipo("Devolver");
 
            
            
            A.setMensaje("Pedir impresora");
-           B.setMensaje("usar impresora");
-           C.setMensaje("devolver impresora");
+           B.setMensaje("Usar impresora");
+           C.setMensaje("Devolver impresora");
            
            Programa programa1 = new Programa();
            Programa programa2 = new Programa();
@@ -74,8 +74,8 @@ public class SimulacionInfraestructura {
            sis.getProcesos().add(proc2);
            sis.correrProcesos(8);
 
-           System.out.println("el array procesos listos tiene "+sis.getProcesosListos().size());
-           System.out.println("el array procesos  tiene "+sis.getProcesos().size());
+           System.out.println("El array procesos listos tiene " + sis.getProcesosListos().size() + " procesos.");
+           System.out.println("El array procesos tiene " + sis.getProcesos().size() + " procesos.");
            
            
            

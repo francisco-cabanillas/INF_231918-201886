@@ -88,7 +88,7 @@ public class Sistema {
     }
     
     private void correrPrograma(Proceso proceso, int Quantum) {
-        System.out.println("Correr programa");
+        System.out.println("Correr programa de proceso " + proceso.getNumero());
         int tiempo = 0;
         Programa programa = proceso.getPrograma();
         int posicion = proceso.getPosicionEjecucion();

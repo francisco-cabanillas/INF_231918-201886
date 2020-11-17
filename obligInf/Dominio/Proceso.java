@@ -18,9 +18,7 @@ public class Proceso {
     }
 
     public Proceso() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         this.setNumero(0);
-        
     }
     
     public int getNumero() {
