@@ -6,7 +6,7 @@ public class Recurso {
     
     public Recurso(String unNombre){
         this.setNombre(unNombre);
-        this.setDisponible(false);
+        this.setDisponible(true);
     }
     
     public String getNombre() {
@@ -21,8 +21,8 @@ public class Recurso {
         return disponible;
     }
 
-    public void setDisponible(Boolean enUso) {
-        this.disponible = disponible;
+    public void setDisponible(Boolean estaDisponible) {
+        this.disponible = estaDisponible;
     }
     
 }

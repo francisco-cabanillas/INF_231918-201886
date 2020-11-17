@@ -1,6 +1,5 @@
 package Dominio;
 
-import java.util.List;
 
 public class Instruccion {
     private int tiempo;

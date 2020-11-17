@@ -24,6 +24,14 @@ public class SimulacionInfraestructura {
            ///////////////////////////////////////////////// agregue 2 procesos fijos al array (version 0)
            
            Usuario usuario1 = new Usuario("usuario 1");
+
+           Recurso impresora = new Recurso("Impresora");
+           Recurso teclado = new Recurso("Teclado");
+           Recurso pantalla = new Recurso("Pantalla");
+
+           sis.getRecursos().add(impresora);
+           sis.getRecursos().add(teclado);
+           sis.getRecursos().add(pantalla);
            
            Instruccion A = new Instruccion(2); //pide impresora
            Instruccion B = new Instruccion(4); //usa impresora
@@ -31,12 +39,14 @@ public class SimulacionInfraestructura {
            A.setTipo("Pedir");
            B.setTipo("Usar");
            C.setTipo("Devolver");
-
-           
            
            A.setMensaje("Pedir impresora");
            B.setMensaje("Usar impresora");
            C.setMensaje("Devolver impresora");
+
+           A.setRecurso(impresora);
+           B.setRecurso(impresora);
+           C.setRecurso(impresora);
            
            Programa programa1 = new Programa();
            Programa programa2 = new Programa();
@@ -50,6 +60,7 @@ public class SimulacionInfraestructura {
            programa1.getInstrucciones().add(B);
            programa1.getInstrucciones().add(B);
            programa1.getInstrucciones().add(B);
+           programa1.getInstrucciones().add(C);
            
            programa2.getInstrucciones().add(A);
            programa2.getInstrucciones().add(B);
@@ -72,7 +83,7 @@ public class SimulacionInfraestructura {
            
            sis.getProcesos().add(proc1);
            sis.getProcesos().add(proc2);
-           sis.correrProcesos(8);
+           sis.correrProcesos(Quantum);
 
            System.out.println("El array procesos listos tiene " + sis.getProcesosListos().size() + " procesos.");
            System.out.println("El array procesos tiene " + sis.getProcesos().size() + " procesos.");

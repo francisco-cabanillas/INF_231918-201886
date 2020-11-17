@@ -13,7 +13,7 @@ public class Sistema {
    private final ArrayList<Proceso> procesosListos; //procesos listos en orden, para ejecutsr el siguiente en la lista
    private final ArrayList<Proceso> procesosBloqueados; //procesos bloqueados (sin orden)
                                                                             //esperan eventos para ser desbloqueados.
-   private final int Quantum = 15;
+  
    
    
    public Sistema(){
@@ -88,51 +88,52 @@ public class Sistema {
     }
     
     private void correrPrograma(Proceso proceso, int Quantum) {
-        System.out.println("Correr programa de proceso " + proceso.getNumero());
+        System.out.println("\nCorrer programa de proceso " + proceso.getNumero() + "\n");
         int tiempo = 0;
         Programa programa = proceso.getPrograma();
         int posicion = proceso.getPosicionEjecucion();
         
         List<Instruccion> instrucciones = programa.getInstrucciones();
         Iterator<Instruccion> it = instrucciones.iterator();
-        while(it.hasNext() && tiempo <= Quantum){ 
+        while(tiempo <= Quantum && it.hasNext()){
+            
             Instruccion instruccion = it.next();
             tiempo += instruccion.getTiempo();
-            System.out.println(programa.getInstrucciones().get(posicion).getMensaje());
-        
-          //  if(instruccion.getTipo() == "pide"){
-                    //Boolean disponible = sis.SolicitarRecurso(instruccion.getRecurso());
-                    
-                    //if(!disponible){
-
-                        proceso.setEstado(0);
-                        proceso.setPosicionEjecucion(posicion);
-                        this.getProcesosBloqueados().add(proceso);
-
-                        //return;
-                        
-                    //}
-                    
-          //  }else if(instruccion.getTipo() == "devuelve"){ //si se libera un recurso, pasa de los bloqueados a los listos
-                  //  sis.liberarRecurso(instruccion.getRecurso()); 
-                    //le pregunte a caffa si es solo mover el primero de la lista de bloqueados que tenga ese recurso, a la lista de listos o todos los que lo tengan 
-                    
-                 //   sis.moverAListosProcesosConEseRecurso(instruccion.getRecurso());
-         //   }else{
-                
-         //   }
             
-           
-            proceso.setPosicionEjecucion(posicion++);      
+        
+            if(instruccion.getTipo() == "Pedir"){
+                Boolean disponible = solicitarRecurso(instruccion.getRecurso());
+                
+                if(!disponible){
+                    System.out.println("El proceso " + proceso.getNumero() + " no pudo completar la tarea " + 
+                        instruccion.getMensaje() + " porque el recurso se encuentra en uso.");
+                    proceso.setEstado(0);
+                    proceso.setPosicionEjecucion(posicion);
+                    proceso.setRecurso(instruccion.getRecurso());
+                    this.getProcesosBloqueados().add(proceso);
+                    this.getProcesosListos().remove(proceso);
+
+                    return;
+                } else {
+                    System.out.println(instruccion.getMensaje());
+                }
+                    
+            }else if(instruccion.getTipo() == "Devolver"){ //si se libera un recurso, pasa de los bloqueados a los listos
+                devolverRecurso(instruccion.getRecurso());
+                System.out.println(instruccion.getMensaje()); 
+                //le pregunte a caffa si es solo mover el primero de la lista de bloqueados que tenga ese recurso, a la lista de listos o todos los que lo tengan 
+                
+                validarEstados();
+            }else{
+                System.out.println(instruccion.getMensaje());
+            }
+            
+        
+            proceso.setPosicionEjecucion(posicion++);
         }
         
-        if(!it.hasNext()){ //logro hacer todas las instrucciones
-            System.out.println( "Proceso "+ proceso.getNumero() +" se ejecuto completamente.");
-            this.getProcesosListos().remove(proceso); 
-            this.getProcesos().remove(proceso); 
-           
-        }else{ //se fue por timeout
-            System.out.println("Proceso "+ proceso.getNumero() +" perdio CPU por timeOut en posicion "+ proceso.getPosicionEjecucion());
+        if(tiempo > Quantum){ //se fue por timeout
+            System.out.println("\nProceso "+ proceso.getNumero() +" perdio CPU por timeOut en posicion "+ proceso.getPosicionEjecucion() + "\n");
             //lo elimina de la primer posicion de los listos y lo agrega en la ultima 
             this.getProcesosListos().remove(0); //que solo elimine uno
 
@@ -141,7 +142,10 @@ public class Sistema {
             int ultimoIndex = getUltimoIndex(this.getProcesosListos());
             this.getProcesosListos().add(ultimoIndex, proceso); //lo agrega ultimo, pero con menos instrucciones.
             
-            
+        }else{  //logro hacer todas las instrucciones
+            System.out.println( "\n Proceso "+ proceso.getNumero() +" se ejecuto completamente. \n");
+            this.getProcesosListos().remove(proceso); 
+            this.getProcesos().remove(proceso); 
         }
         
         
@@ -151,8 +155,8 @@ public class Sistema {
 
     private static void eliminarInstruccionesYaEjecutadas(List<Instruccion> instrucciones, int ultimaPosicion){
 
-        for (int i=0; i<ultimaPosicion; i++) {
-            instrucciones.remove(i);
+        for (int i=0; i <= ultimaPosicion; i++) {
+            instrucciones.remove(0);
             
         }
     }
@@ -163,20 +167,42 @@ public class Sistema {
         }
         return -1;
     }
+
     
-    public Boolean SolicitarRecurso(Recurso recurso) {
-        Iterator<Recurso> it = this.getRecursos().iterator();
+    public Boolean solicitarRecurso(Recurso recurso){
+        if(!recurso.getDisponible()){
+            return false;
+        } else {
+            recurso.setDisponible(Boolean.FALSE);
+        }
+        return true;
+    }
+    public void devolverRecurso(Recurso recurso){
+        recurso.setDisponible(Boolean.TRUE);
+    }
+
+    public void validarEstados() {
+        Iterator<Proceso> it = procesosBloqueados.iterator();
         while(it.hasNext()){
-            if(it == recurso){
-                return recurso.getDisponible(); 
+            Proceso proceso = it.next();
+            Recurso recursoEnEspera = proceso.getRecurso();
+            if(recursoEnEspera.getDisponible()){
+                proceso.setEstado(3);
+                getProcesosListos().add(proceso);
+                
+                proceso.setRecurso(null);
             }
         }
-        return false;
+        it = procesosListos.iterator();
+        while(it.hasNext()){
+            Proceso proceso = it.next();
+            if(getProcesosBloqueados().contains(proceso)){
+                getProcesosBloqueados().remove(proceso);
+            }
+        }
+        
     }
-    
     /*
-    
-    
    private final int Quantum = 15;
    
    public void CorrerProcesos(){

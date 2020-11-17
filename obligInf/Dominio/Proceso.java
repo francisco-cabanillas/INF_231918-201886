@@ -1,6 +1,5 @@
 package Dominio;
 
-import java.util.List;
 
 public class Proceso {
     private int numero;
