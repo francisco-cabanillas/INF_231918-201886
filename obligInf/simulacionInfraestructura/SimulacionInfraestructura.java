@@ -1,20 +1,18 @@
-package SimulacionInfraestructura;
-
+package simulacionInfraestructura;
 
 import Dominio.Instruccion;
-import Dominio.Proceso;
-import Dominio.Programa;
 import Dominio.Sistema;
 import Dominio.Usuario;
-import static java.lang.System.console;
-import java.util.Iterator;
-import java.util.List;
+import Dominio.Programa;
+import Dominio.Proceso;
+import Dominio.Recurso;
+
 
 
 public class SimulacionInfraestructura {
 
-   
     public static void main(String[] args) {
+        
         
            Sistema sis = new Sistema();
 
@@ -74,17 +72,20 @@ public class SimulacionInfraestructura {
            
            sis.getProcesos().add(proc1);
            sis.getProcesos().add(proc2);
-           ////////////////////////////////////////////////////////
            sis.correrProcesos(8);
 
            System.out.println("el array procesos listos tiene "+sis.getProcesosListos().size());
            System.out.println("el array procesos  tiene "+sis.getProcesos().size());
            
+           
+           
+    }
+    
     
         
         
     
     
-    }}
+}
     
 

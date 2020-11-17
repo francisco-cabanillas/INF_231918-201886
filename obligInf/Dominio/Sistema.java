@@ -13,8 +13,7 @@ import java.util.List;
  *
  * @author Paula Hernandez
  */
-public class Sistema { 
-    
+public class Sistema {
    private final ArrayList<Usuario> usuarios;
    private final ArrayList<Recurso> recursos;
    private final ArrayList<Programa> programas;
@@ -80,7 +79,7 @@ public class Sistema {
             this.procesosListos.add(this.procesos.get(i));      
         }
 
-        
+       
         while(!this.getProcesos().isEmpty()){
 
             while(!this.getProcesosListos().isEmpty()){
@@ -108,16 +107,19 @@ public class Sistema {
         while(it.hasNext() && tiempo <= Quantum){ 
             Instruccion instruccion = it.next();
             tiempo += instruccion.getTiempo();
-           // System.out.println(programa.getInstrucciones().get(posicion).getMensaje());
+           System.out.println(programa.getInstrucciones().get(posicion).getMensaje());
         
           //  if(instruccion.getTipo() == "pide"){
-                    //Boolean disponible = sis.SolicitarRecurso(instruccion.getRecurso());                    
+                    //Boolean disponible = sis.SolicitarRecurso(instruccion.getRecurso());
+                    
                     //if(!disponible){
 
                         proceso.setEstado(0);
                         proceso.setPosicionEjecucion(posicion);
                         this.getProcesosBloqueados().add(proceso);
-                        //return;                        
+
+                        //return;
+                        
                     //}
                     
           //  }else if(instruccion.getTipo() == "devuelve"){ //si se libera un recurso, pasa de los bloqueados a los listos
@@ -125,9 +127,11 @@ public class Sistema {
                     //le pregunte a caffa si es solo mover el primero de la lista de bloqueados que tenga ese recurso, a la lista de listos o todos los que lo tengan 
                     
                  //   sis.moverAListosProcesosConEseRecurso(instruccion.getRecurso());
-         //   }else{             
+         //   }else{
+                
          //   }
-          
+            
+           
             proceso.setPosicionEjecucion(posicion++);      
         }
         
@@ -144,8 +148,13 @@ public class Sistema {
             eliminarInstruccionesYaEjecutadas(proceso.getPrograma().getInstrucciones(), proceso.getPosicionEjecucion());
             proceso.setPosicionEjecucion(0);
             int ultimoIndex = getUltimoIndex(this.getProcesosListos());
-            this.getProcesosListos().add(ultimoIndex, proceso); //lo agrega ultimo, pero con menos instrucciones.         
-        }       
+            this.getProcesosListos().add(ultimoIndex, proceso); //lo agrega ultimo, pero con menos instrucciones.
+            
+            
+        }
+        
+        
+        
     }   
 
 
@@ -173,6 +182,108 @@ public class Sistema {
         }
         return false;
     }
+    
+    /*
+    
+    
+   private final int Quantum = 15;
+   
+   public void CorrerProcesos(){
+       while(!procesos.isEmpty()){
+           int posicion = 0;
+           if(procesos.get(posicion).getEstado() == 3){
+               Proceso proceso = procesos.get(posicion);
+               proceso.setEstado(1);
+               Boolean finalizo = CorrerPrograma(proceso);
+               if(finalizo){
+                   FinalizarProceso(proceso);
+               } else {
+                   proceso.setEstado(0);
+                   
+               }
+           }
+           if(procesos.size() == posicion+1){
+               posicion = 0;
+           } else {
+               posicion++;
+           }
+           if(posicion == 0){
+               ValidarEstados();
+           }
+       }
+   }
+   
+   public void FinalizarProceso(Proceso proceso){
+       procesosFinalizados.add(proceso);
+       procesos.remove(proceso);
+   }
+   
+   public boolean solicitudEjecutarPrograma(Usuario unUsuario, Programa unPrograma){
+        //1. se chequea en matriz de Usuario-Programa (si el usuario puede usar ese programa)
+        //2. se chequea en matriz Usuario-recursos (si el usuario puede usar todos los recursos que estan en ese programa)
+        
+        boolean puedeCrear = true;
+        return puedeCrear;        
+    }
+   
+   //A confir
+   public Boolean SolicitarRecurso(Recurso recurso){
+       if(recurso.getEnUso()){
+           return false;
+       } else {
+           recurso.setEnUso(Boolean.TRUE);
+       }
+       return true;
+   }
+   public void DevolverRecurso(Recurso recurso){
+       recurso.setEnUso(Boolean.FALSE);
+   }
+
+
+    private Boolean CorrerPrograma(Proceso proceso) {
+        int tiempo = 0;
+        Programa programa = proceso.getPrograma();
+        List<Instruccion> instrucciones = programa.getEjecucionesPendientes();
+        Iterator<Instruccion> it = instrucciones.iterator();
+        while(it.hasNext() && tiempo >= this.Quantum){
+            Instruccion instruccion = it.next();
+            tiempo += instruccion.getTiempo();
+            
+            //Validar el uso de recursos en la matriz
+            
+            if(instruccion.getRecurso() != null){
+                Boolean disponible = SolicitarRecurso(instruccion.getRecurso());
+                if(!disponible){
+                    return false;
+                }
+            }
+            //Validar el uso de recursos en la matriz
+            
+            
+            //Falta seguirlo creo
+        }
+        if(programa.getEjecucionesPendientes().isEmpty()){
+            return true;
+        }
+        else {
+            return false;
+        }
+        
+    }
+
+    private void ValidarEstados() {
+        Iterator<Proceso> it = procesos.iterator();
+        while(it.hasNext()){
+            Proceso proceso = it.next();
+            Recurso recursoEnEspera = proceso.getRecursoEnEspera();
+            if(!recursoEnEspera.getEnUso()){
+                proceso.setEstado(3);
+            }
+        }
+        
+    }
+    */
+
     
    
 }
