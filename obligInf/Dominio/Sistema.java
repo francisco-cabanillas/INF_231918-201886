@@ -13,11 +13,15 @@ public class Sistema {
    private final ArrayList<Proceso> procesosListos; //procesos listos en orden, para ejecutsr el siguiente en la lista
    private final ArrayList<Proceso> procesosBloqueados; //procesos bloqueados (sin orden)
                                                                             //esperan eventos para ser desbloqueados.
+
+   private int permisosRecursos[][];
+   private int permisosProgramas[][];
   
    
    
    public Sistema(){
 
+    
     this.usuarios = new ArrayList<>();
     this.recursos = new ArrayList<>();
     this.programas = new ArrayList<>();
@@ -28,50 +32,20 @@ public class Sistema {
                                                                              //esperan eventos para ser desbloqueados.
    }
    
-
-   
-   
-   
-   public boolean solicitudRecursos(Usuario unUsuario, Programa unPrograma, int[][] permisosRecursos){
-        //1. se chequea en matriz Usuario-recursos (si el usuario puede usar todos los recursos que estan en ese programa)
-
-        boolean puedeCrear = true;
-        for (int i=0; i < permisosRecursos.length; i++) {
-            if(unUsuario.getId() == i){ //si es ese usuario (esa fila) confirmar que ninguno de los recursos de su programa está en 0.
-                for (int j=0; j < permisosRecursos[i].length; j++) {
-                    //recurso de la matriz: j
-                    int idRecurso = j;
-                    if(permisosRecursos[i][j]==0 && unPrograma.utilizaRecurso(idRecurso)){//si está denegado, y ese programa necesita ese recurso, solicitud denegada.
-                        System.out.println("Se denegó la ejecucion del programa " + unPrograma.getId() + " por parte del usuario "+ unUsuario.getNombre() + ". No tiene permisos para usar sus recursos.");
-                        puedeCrear = false;
-                    }
-                  }
-            }
-            
-        }
-        return puedeCrear;        
+    public int[][] getPermisosRecursos(){
+        return this.permisosRecursos;
     }
 
-    public boolean solicitudEjecutarPrograma(Usuario unUsuario, Programa unPrograma, int[][] permisosProgramas){
-        //2. se chequea en matriz Usuario-Programa (si el usuario puede ejecutar ese programa)
-
-        boolean puedeCrear = true;
-        for (int i=0; i < permisosProgramas.length; i++) {
-            if(unUsuario.getId() == i){ //si es ese usuario (esa fila) recorrer programas
-                for (int j=0; j < permisosProgramas[i].length; j++) {
-                    
-                    int idPrograma = j;
-                    if(permisosProgramas[i][j]==0 && unPrograma.getId() == idPrograma){//si está denegado, y ese programa necesita ese recurso, solicitud denegada.
-                        System.out.println("Se denegó la ejecucion del programa " + unPrograma.getId() + " por parte del usuario "+ unUsuario.getNombre());
-                        puedeCrear = false;
-                    }
-                  }
-            }           
-        }
-        return puedeCrear;        
+    public void setPermisosRecursos(int[][] unaMatrizPermisosRecursos){
+        this.permisosRecursos = unaMatrizPermisosRecursos;
+    }
+    public int[][] getPermisosProgramas(){
+        return this.permisosProgramas;
     }
 
-    
+    public void setPermisosProgramas(int[][] unaMatrizPermisosProgramas){
+        this.permisosProgramas = unaMatrizPermisosProgramas;
+    }
 
     public ArrayList<Usuario> getUsuarios() {
         return usuarios;
@@ -96,7 +70,45 @@ public class Sistema {
     public ArrayList<Proceso> getProcesosBloqueados() {
         return procesosBloqueados;
     }
-   
+    public boolean solicitudRecursos(Usuario unUsuario, Programa unPrograma){
+        //1. se chequea en matriz Usuario-recursos (si el usuario puede usar todos los recursos que estan en ese programa)
+
+        boolean puedeCrear = true;
+        for (int i=0; i < this.getPermisosRecursos().length; i++) {
+            if(unUsuario.getId() == i){ //si es ese usuario (esa fila) confirmar que ninguno de los recursos de su programa está en 0.
+                for (int j=0; j < this.getPermisosRecursos()[i].length; j++) {
+                    //recurso de la matriz: j
+                    int idRecurso = j;
+                    if(this.getPermisosRecursos()[i][j]==0 && unPrograma.utilizaRecurso(idRecurso)){//si está denegado, y ese programa necesita ese recurso, solicitud denegada.
+                        System.out.println("Se denegó la ejecucion del programa " + unPrograma.getId() + " por parte del usuario "+ unUsuario.getNombre() + ". No tiene permisos para usar sus recursos.");
+                        puedeCrear = false;
+                    }
+                  }
+            }
+            
+        }
+        return puedeCrear;        
+    }
+
+    public boolean solicitudEjecutarPrograma(Usuario unUsuario, Programa unPrograma){
+        //2. se chequea en matriz Usuario-Programa (si el usuario puede ejecutar ese programa)
+
+        boolean puedeCrear = true;
+        for (int i=0; i < this.getPermisosProgramas().length; i++) {
+            if(unUsuario.getId() == i){ //si es ese usuario (esa fila) recorrer programas
+                for (int j=0; j < this.getPermisosProgramas()[i].length; j++) {
+                    
+                    int idPrograma = j;
+                    if(this.getPermisosProgramas()[i][j]==0 && unPrograma.getId() == idPrograma){//si está denegado, y ese programa necesita ese recurso, solicitud denegada.
+                        System.out.println("Se denegó la ejecucion del programa " + unPrograma.getId() + " por parte del usuario "+ unUsuario.getNombre());
+                        puedeCrear = false;
+                    }
+                  }
+            }           
+        }
+        return puedeCrear;        
+    }
+
     
    public void correrProcesos(int Quantum){
         
@@ -130,7 +142,12 @@ public class Sistema {
         
             if(instruccion.getTipo() == "Pedir"){
                 Boolean disponible = solicitarRecurso(instruccion.getRecurso(), proceso);
-                
+                if(!solicitudRecursos(proceso.getPropiedad(), proceso.getPrograma())){//si no tiene permisos, 
+                    System.out.println("el proceso" + proceso +" del usuario "+ proceso.getPropiedad().getNombre() + " y solicitó acceso al recurso " + instruccion.getRecurso() + "denegado por falta de permisos, se corta la ejecución del proceso. ");
+                    this.getProcesosFinalizados().add(proceso);
+                    this.getProcesosListos().remove(proceso);
+                    return;
+                }
                 if(!disponible){
                     System.out.println("El proceso " + proceso + " no pudo completar la tarea " + 
                         instruccion + " porque el recurso se encuentra en uso.");

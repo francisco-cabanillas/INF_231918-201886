@@ -141,6 +141,8 @@ public class SimulacionInfraestructura {
            permisosRecursos[2][1] = 0;
            permisosRecursos[2][2] = 1;
 
+           sis.setPermisosRecursos(permisosRecursos);
+
            //crear matriz Usuarios-Programas
            int permisosProgramas[][] = new int[sis.getUsuarios().size()][sis.getProgramas().size()];
 
@@ -155,22 +157,24 @@ public class SimulacionInfraestructura {
            permisosRecursos[2][1] = 0;
            permisosRecursos[2][2] = 1;
 
+           sis.setPermisosProgramas(permisosProgramas);
+
 
            //Crear los procesos validando permisos
        
-           if(sis.solicitudRecursos(usuario1, programa1, permisosRecursos) && sis.solicitudEjecutarPrograma(usuario1, programa1, permisosProgramas)){
+           if(sis.solicitudEjecutarPrograma(usuario1, programa1)){
             Proceso proc1 = new Proceso(usuario1, programa1);
             proc1.setNumero(1);
             sis.getProcesosListos().add(proc1);
            }
 
-           if(sis.solicitudRecursos(usuario2, programa2, permisosRecursos) && sis.solicitudEjecutarPrograma(usuario2, programa2, permisosProgramas)){
+           if(sis.solicitudEjecutarPrograma(usuario2, programa2)){
             Proceso proc2 = new Proceso(usuario2, programa2);
             proc2.setNumero(2);
             sis.getProcesosListos().add(proc2);
            }
 
-           if(sis.solicitudRecursos(usuario3, programa3, permisosRecursos) && sis.solicitudEjecutarPrograma(usuario3, programa3, permisosProgramas)){
+           if(sis.solicitudEjecutarPrograma(usuario3, programa3)){
             Proceso proc3 = new Proceso(usuario3, programa3);
             proc3.setNumero(3);
             sis.getProcesosListos().add(proc3);
