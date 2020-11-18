@@ -28,14 +28,50 @@ public class Sistema {
                                                                              //esperan eventos para ser desbloqueados.
    }
    
+
    
-   public boolean solicitudEjecutarPrograma(Usuario unUsuario, Programa unPrograma){
-        //1. se chequea en matriz de Usuario-Programa (si el usuario puede usar ese programa)
-        //2. se chequea en matriz Usuario-recursos (si el usuario puede usar todos los recursos que estan en ese programa)
-        
+   
+   
+   public boolean solicitudRecursos(Usuario unUsuario, Programa unPrograma, int[][] permisosRecursos){
+        //1. se chequea en matriz Usuario-recursos (si el usuario puede usar todos los recursos que estan en ese programa)
+
         boolean puedeCrear = true;
+        for (int i=0; i < permisosRecursos.length; i++) {
+            if(unUsuario.getId() == i){ //si es ese usuario (esa fila) confirmar que ninguno de los recursos de su programa está en 0.
+                for (int j=0; j < permisosRecursos[i].length; j++) {
+                    //recurso de la matriz: j
+                    int idRecurso = j;
+                    if(permisosRecursos[i][j]==0 && unPrograma.utilizaRecurso(idRecurso)){//si está denegado, y ese programa necesita ese recurso, solicitud denegada.
+                        System.out.println("Se denegó la ejecucion del programa " + unPrograma.getId() + " por parte del usuario "+ unUsuario.getNombre() + ". No tiene permisos para usar sus recursos.");
+                        puedeCrear = false;
+                    }
+                  }
+            }
+            
+        }
         return puedeCrear;        
     }
+
+    public boolean solicitudEjecutarPrograma(Usuario unUsuario, Programa unPrograma, int[][] permisosProgramas){
+        //2. se chequea en matriz Usuario-Programa (si el usuario puede ejecutar ese programa)
+
+        boolean puedeCrear = true;
+        for (int i=0; i < permisosProgramas.length; i++) {
+            if(unUsuario.getId() == i){ //si es ese usuario (esa fila) recorrer programas
+                for (int j=0; j < permisosProgramas[i].length; j++) {
+                    
+                    int idPrograma = j;
+                    if(permisosProgramas[i][j]==0 && unPrograma.getId() == idPrograma){//si está denegado, y ese programa necesita ese recurso, solicitud denegada.
+                        System.out.println("Se denegó la ejecucion del programa " + unPrograma.getId() + " por parte del usuario "+ unUsuario.getNombre());
+                        puedeCrear = false;
+                    }
+                  }
+            }           
+        }
+        return puedeCrear;        
+    }
+
+    
 
     public ArrayList<Usuario> getUsuarios() {
         return usuarios;
@@ -109,12 +145,12 @@ public class Sistema {
                 }
                     
             }else if(proceso.getRecursoEnUso() != null && proceso.getRecursoEnUso().equals(instruccion.getRecurso())){
-                 if(instruccion.getTipo() == "Devolver"){ //si se libera un recurso, pasa de los bloqueados a los listos
+                 if(instruccion.getTipo() == "Devolver"){ //si se libera un recurso
                     devolverRecurso(proceso);
                     System.out.println(instruccion); 
                     //le pregunte a caffa si es solo mover el primero de la lista de bloqueados que tenga ese recurso, a la lista de listos o todos los que lo tengan 
                     
-                    validarEstados();
+                    desbloquearProcesos();
                 }else{
                     System.out.println(instruccion);
                 }
@@ -180,7 +216,7 @@ public class Sistema {
         proceso.setRecursoEnUso(null);
     }
 
-    public void validarEstados() {
+    public void desbloquearProcesos() {
         Iterator<Proceso> it = procesosBloqueados.iterator();
         while(it.hasNext()){
             Proceso proceso = it.next();
@@ -224,7 +260,7 @@ public class Sistema {
                posicion++;
            }
            if(posicion == 0){
-               ValidarEstados();
+               desbloquearProcesos();
            }
        }
    }
