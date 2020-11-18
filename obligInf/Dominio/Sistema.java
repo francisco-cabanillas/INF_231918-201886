@@ -70,7 +70,7 @@ public class Sistema {
     public ArrayList<Proceso> getProcesosBloqueados() {
         return procesosBloqueados;
     }
-    public boolean solicitudRecursos(Usuario unUsuario, Programa unPrograma){
+    public boolean solicitudPermisosRecursos(Usuario unUsuario, Programa unPrograma){
         //1. se chequea en matriz Usuario-recursos (si el usuario puede usar todos los recursos que estan en ese programa)
 
         boolean puedeCrear = true;
@@ -80,7 +80,7 @@ public class Sistema {
                     //recurso de la matriz: j
                     int idRecurso = j;
                     if(this.getPermisosRecursos()[i][j]==0 && unPrograma.utilizaRecurso(idRecurso)){//si está denegado, y ese programa necesita ese recurso, solicitud denegada.
-                        System.out.println("Se denegó la ejecucion del programa " + unPrograma.getId() + " por parte del usuario "+ unUsuario.getNombre() + ". No tiene permisos para usar sus recursos.");
+                        //System.out.println("Se denegó la ejecucion del programa " + unPrograma.getId() + " por parte del usuario "+ unUsuario.getNombre() + ". No tiene permisos para usar sus recursos.");
                         puedeCrear = false;
                     }
                   }
@@ -142,8 +142,8 @@ public class Sistema {
         
             if(instruccion.getTipo() == "Pedir"){
                 Boolean disponible = solicitarRecurso(instruccion.getRecurso(), proceso);
-                if(!solicitudRecursos(proceso.getPropiedad(), proceso.getPrograma())){//si no tiene permisos, 
-                    System.out.println("el proceso" + proceso +" del usuario "+ proceso.getPropiedad().getNombre() + " y solicitó acceso al recurso " + instruccion.getRecurso() + "denegado por falta de permisos, se corta la ejecución del proceso. ");
+                if(!solicitudPermisosRecursos(proceso.getPropiedad(), proceso.getPrograma())){//si no tiene permisos, 
+                    System.out.println("el proceso " + proceso +" del usuario "+ proceso.getPropiedad().getNombre() + " y solicitó acceso al recurso " + instruccion.getRecurso() + " fue denegado por falta de permisos, se corta la ejecución del proceso. ");
                     this.getProcesosFinalizados().add(proceso);
                     this.getProcesosListos().remove(proceso);
                     return;
