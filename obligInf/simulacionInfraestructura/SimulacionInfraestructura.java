@@ -54,6 +54,8 @@ public class SimulacionInfraestructura {
         sis.getUsuarios().add(usuario2);
         sis.getUsuarios().add(usuario3);
 
+        ///////////////////////////////////////////////////// VERSION 2 /////////////////////////////////////////////////////
+
         Recurso impresora = new Recurso("Impresora", 0);
         Recurso calculadora = new Recurso("Calculadora", 1);
         Recurso pantalla = new Recurso("Pantalla", 2);
@@ -61,6 +63,9 @@ public class SimulacionInfraestructura {
         sis.getRecursos().add(impresora);
         sis.getRecursos().add(calculadora);
         sis.getRecursos().add(pantalla);
+
+        ///////////////////////////////////////////////////// FIN VERSION 2 /////////////////////////////////////////////////////
+
         
         Instruccion A = new Instruccion(2); //pide impresora
         Instruccion B = new Instruccion(4); //usa impresora
@@ -76,6 +81,7 @@ public class SimulacionInfraestructura {
         A.setMensaje(A.getTipo() + " " + A.getRecurso().getNombre());
         B.setMensaje(B.getTipo() + " " + B.getRecurso().getNombre());
         C.setMensaje(C.getTipo() + " " + C.getRecurso().getNombre());
+
 
         Instruccion D = new Instruccion(1); //pide calculadora
         Instruccion E = new Instruccion(6); //usa calculadora
@@ -106,12 +112,13 @@ public class SimulacionInfraestructura {
         G.setMensaje(G.getTipo() + " " + G.getRecurso().getNombre());
         H.setMensaje(H.getTipo() + " " + H.getRecurso().getNombre());
         I.setMensaje(I.getTipo() + " " + I.getRecurso().getNombre());
+
         
         Programa programa1 = new Programa();
         Programa programa2 = new Programa();
         Programa programa3 = new Programa();
 
-        //agrega instrucciones al programa
+        //Agrega instrucciones al programa
         programa1.getInstrucciones().add(C); //uso impresora
         programa1.getInstrucciones().add(E); //uso calculadora
         programa1.getInstrucciones().add(A); //pido impresora
@@ -150,10 +157,10 @@ public class SimulacionInfraestructura {
 
         /* VERSION 3…………… multiplicidad de usuarios. Todos los programas tienen permiso de ejecución.  Sólo usamos la matriz de permisos usuarios contra recursos */
 
-        //crear matriz Usuarios-Recursos
+        //Crear matriz Usuarios-Recursos
         int permisosRecursos[][] = new int[sis.getUsuarios().size()][sis.getRecursos().size()];
 
-        //filas usuarios, columnas recursos
+        //Filas usuarios, columnas recursos
         permisosRecursos[0][0] = 0; //fila 0 = usuario 1. //col 0 = recurso =
         permisosRecursos[0][1] = 1; //fila 0 = usuario 0. //col 1 = recurso 1
         permisosRecursos[0][2] = 0;
@@ -166,10 +173,14 @@ public class SimulacionInfraestructura {
 
         sis.setPermisosRecursos(permisosRecursos);
 
-        //crear matriz Usuarios-Programas
+        ///////////////////////////////////////////////////// VERSION 4 /////////////////////////////////////////////////////
+
+        /* VERSION 4…………… multiplicidad de usuarios. Los programas tienen permisos de ejecución.  Usamos las matrices de permisos usuarios contra recursos y de usuarios contra programas */
+
+        //Crear matriz Usuarios-Programas
         int permisosProgramas[][] = new int[sis.getUsuarios().size()][sis.getProgramas().size()];
 
-        //filas usuarios, columnas recursos
+        //Filas usuarios, Columnas recursos
         permisosRecursos[0][0] = 0; //fila 0 = usuario 1. //col 0 = programa 0
         permisosRecursos[0][1] = 1; //fila 0 = usuario 0. //col 1 = programa 1
         permisosRecursos[0][2] = 0;
@@ -186,21 +197,21 @@ public class SimulacionInfraestructura {
         //Crear los procesos validando permisos
     
         if(sis.solicitudEjecutarPrograma(usuario1, programa1)){
-        Proceso proc1 = new Proceso(usuario1, programa1);
-        proc1.setNumero(1);
-        sis.getProcesosListos().add(proc1);
+            Proceso proc1 = new Proceso(usuario1, programa1);
+            proc1.setNumero(1);
+            sis.getProcesosListos().add(proc1);
         }
 
         if(sis.solicitudEjecutarPrograma(usuario2, programa2)){
-        Proceso proc2 = new Proceso(usuario2, programa2);
-        proc2.setNumero(2);
-        sis.getProcesosListos().add(proc2);
+            Proceso proc2 = new Proceso(usuario2, programa2);
+            proc2.setNumero(2);
+            sis.getProcesosListos().add(proc2);
         }
 
         if(sis.solicitudEjecutarPrograma(usuario3, programa3)){
-        Proceso proc3 = new Proceso(usuario3, programa3);
-        proc3.setNumero(3);
-        sis.getProcesosListos().add(proc3);
+            Proceso proc3 = new Proceso(usuario3, programa3);
+            proc3.setNumero(3);
+            sis.getProcesosListos().add(proc3);
         }
 
         sis.correrProcesos(Quantum);

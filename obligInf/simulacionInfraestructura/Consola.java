@@ -25,7 +25,7 @@ public class Consola {
         boolean ingresoCorrecto = false;
         while(!ingresoCorrecto){
             try{
-                retorno = in.nextInt();;
+                retorno = in.nextInt();
                 if(retorno == 1 || retorno == 2 || retorno == 3){
                     ingresoCorrecto = true;
                 } else {
@@ -34,7 +34,19 @@ public class Consola {
             }
             catch(Exception e){
                 System.out.print("Vuelva a ingresar su opcion (1/2/3): ");
+                retorno = 0;
             }
+        }
+
+        return retorno;
+    }
+
+    public int PrintMenuIngresoDatos(){
+        int retorno = 0;
+        boolean ingresoCorrecto = false;
+        
+        while(!ingresoCorrecto){
+
         }
 
         return retorno;
