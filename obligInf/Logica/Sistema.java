@@ -1,8 +1,15 @@
-package Dominio;
+package Logica;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import Dominio.Instruccion;
+import Dominio.Proceso;
+import Dominio.Programa;
+import Dominio.Recurso;
+import Dominio.Usuario;
+import simulacionInfraestructura.Consola;
 
 public class Sistema {
    private final ArrayList<Usuario> usuarios;
@@ -16,20 +23,22 @@ public class Sistema {
 
    private int permisosRecursos[][];
    private int permisosProgramas[][];
+
+   Consola con;
   
    
    
    public Sistema(){
-
-    
-    this.usuarios = new ArrayList<>();
-    this.recursos = new ArrayList<>();
-    this.programas = new ArrayList<>();
-    
-    this.procesosFinalizados = new ArrayList<>(); //procesos (con su estado y posicionEjecucion)
-    this.procesosListos = new ArrayList<>(); //procesos listos en orden, para ejecutsr el siguiente en la lista
-    this.procesosBloqueados = new ArrayList<>(); //procesos bloqueados (sin orden)
-                                                                             //esperan eventos para ser desbloqueados.
+        con = new Consola();
+        
+        this.usuarios = new ArrayList<>();
+        this.recursos = new ArrayList<>();
+        this.programas = new ArrayList<>();
+        
+        this.procesosFinalizados = new ArrayList<>(); //procesos (con su estado y posicionEjecucion)
+        this.procesosListos = new ArrayList<>(); //procesos listos en orden, para ejecutsr el siguiente en la lista
+        this.procesosBloqueados = new ArrayList<>(); //procesos bloqueados (sin orden)
+                                                                                //esperan eventos para ser desbloqueados.
    }
    
     public int[][] getPermisosRecursos(){
