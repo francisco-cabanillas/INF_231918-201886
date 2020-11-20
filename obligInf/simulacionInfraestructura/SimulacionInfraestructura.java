@@ -11,12 +11,16 @@ import Dominio.Recurso;
 
 public class SimulacionInfraestructura {
 
-    private static Consola con;
+    private static Consola consola;
+
+    private static Recurso recursoDemo1 = new Recurso("Impresora", 0);
+    private static Recurso recursoDemo2 = new Recurso("Calculadora", 1);
+    private static Recurso recursoDemo3 = new Recurso("Pantalla", 2);
 
     public static void main(String[] args) {
 
-        con = new Consola();
-        con.PrintInicial();
+        consola = new Consola();
+        consola.PrintInicial();
 
         int opcion = 0;
 
@@ -24,28 +28,29 @@ public class SimulacionInfraestructura {
         int correrDatosPropios = 2;
         int finalizar = 3;
 
-        
-        while(opcion != finalizar){
-            opcion = con.PrintMenuPrincipal();
+        while (opcion != finalizar) {
+            opcion = consola.PrintMenuPrincipal();
 
-            if(opcion == correrDemo){
-                CorrerDemo();
+            if (opcion == correrDemo) {
+                int quantumDemo = 15;
+                CorrerDemo(recursoDemo1, recursoDemo2, recursoDemo3, quantumDemo);
             } else if(opcion == correrDatosPropios){
-                CorrerDatosPropios();
+                Recurso recurso1 = consola.PedirRecurso(1);
+                Recurso recurso2 = consola.PedirRecurso(2);
+                Recurso recurso3 = consola.PedirRecurso(3);
+
+                int quantum = consola.PedirQuantum();
+
+                CorrerDemo(recurso1, recurso2, recurso3, quantum);
             } else {
-                con.PrintFinal();
+                consola.PrintFinal();
             }
         }
     }
 
-    private static void CorrerDatosPropios() {
+    public static void CorrerDemo(Recurso recurso1, Recurso recurso2, Recurso recurso3, int quantum) {
         Sistema sis = new Sistema();
-    }
 
-    public static void CorrerDemo() {
-        Sistema sis = new Sistema();
-        
-        int Quantum = 15;
         Usuario usuario1 = new Usuario("Juan", 0);
         Usuario usuario2 = new Usuario("Pepe", 1);
         Usuario usuario3 = new Usuario("Maria", 2);
@@ -56,13 +61,9 @@ public class SimulacionInfraestructura {
 
         ///////////////////////////////////////////////////// VERSION 2 /////////////////////////////////////////////////////
 
-        Recurso impresora = new Recurso("Impresora", 0);
-        Recurso calculadora = new Recurso("Calculadora", 1);
-        Recurso pantalla = new Recurso("Pantalla", 2);
-
-        sis.getRecursos().add(impresora);
-        sis.getRecursos().add(calculadora);
-        sis.getRecursos().add(pantalla);
+        sis.getRecursos().add(recurso1);
+        sis.getRecursos().add(recurso2);
+        sis.getRecursos().add(recurso3);
 
         ///////////////////////////////////////////////////// FIN VERSION 2 /////////////////////////////////////////////////////
 
@@ -74,9 +75,9 @@ public class SimulacionInfraestructura {
         B.setTipo("Usar");
         C.setTipo("Devolver");
 
-        A.setRecurso(impresora);
-        B.setRecurso(impresora);
-        C.setRecurso(impresora);
+        A.setRecurso(recurso1);
+        B.setRecurso(recurso1);
+        C.setRecurso(recurso1);
         
         A.setMensaje(A.getTipo() + " " + A.getRecurso().getNombre());
         B.setMensaje(B.getTipo() + " " + B.getRecurso().getNombre());
@@ -90,9 +91,9 @@ public class SimulacionInfraestructura {
         E.setTipo("Usar");
         F.setTipo("Devolver");
 
-        D.setRecurso(calculadora);
-        E.setRecurso(calculadora);
-        F.setRecurso(calculadora);
+        D.setRecurso(recurso2);
+        E.setRecurso(recurso2);
+        F.setRecurso(recurso2);
         
         D.setMensaje(D.getTipo() + " " + D.getRecurso().getNombre());
         E.setMensaje(E.getTipo() + " " + E.getRecurso().getNombre());
@@ -105,9 +106,9 @@ public class SimulacionInfraestructura {
         H.setTipo("Usar");
         I.setTipo("Devolver");
 
-        G.setRecurso(pantalla);
-        H.setRecurso(pantalla);
-        I.setRecurso(pantalla);
+        G.setRecurso(recurso3);
+        H.setRecurso(recurso3);
+        I.setRecurso(recurso3);
         
         G.setMensaje(G.getTipo() + " " + G.getRecurso().getNombre());
         H.setMensaje(H.getTipo() + " " + H.getRecurso().getNombre());
@@ -214,7 +215,7 @@ public class SimulacionInfraestructura {
             sis.getProcesosListos().add(proc3);
         }
 
-        sis.correrProcesos(Quantum);
+        sis.correrProcesos(quantum);
     }
     
 }
