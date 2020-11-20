@@ -24,12 +24,12 @@ public class Sistema {
    private int permisosRecursos[][];
    private int permisosProgramas[][];
 
-   Consola con;
+   Consola consola;
   
    
    
    public Sistema(){
-        con = new Consola();
+        consola = new Consola();
         
         this.usuarios = new ArrayList<>();
         this.recursos = new ArrayList<>();
@@ -109,7 +109,7 @@ public class Sistema {
                     
                     int idPrograma = j;
                     if(this.getPermisosProgramas()[i][j]==0 && unPrograma.getId() == idPrograma){//si está denegado, y ese programa necesita ese recurso, solicitud denegada.
-                        System.out.println("Se denegó la ejecucion del programa " + unPrograma.getId() + " por parte del usuario "+ unUsuario.getNombre());
+                        consola.PrintDenegacionEjecucion(unPrograma.getId(), unUsuario.getNombre());
                         puedeCrear = false;
                     }
                   }
@@ -129,14 +129,13 @@ public class Sistema {
                 
         }
 
-        System.out.println("El array procesos listos tiene " + getProcesosListos().size() + " procesos.");
-        System.out.println("El array procesos finalizados tiene " + getProcesosFinalizados().size() + " procesos.");
-        System.out.println("El array procesos bloqueados quedo con " + getProcesosBloqueados().size() + " procesos.\n");
+        consola.PrintSizeProcesos(getProcesosListos().size(), getProcesosFinalizados().size(), getProcesosBloqueados().size());
            
     }
     
     private void correrPrograma(Proceso proceso, int Quantum) {
-        System.out.println("\nCorrer programa de proceso " + proceso + "\n");
+        consola.PrintCorrerPrograma(proceso);
+
         int tiempo = 0;
         Programa programa = proceso.getPrograma();
         int posicion = proceso.getPosicionEjecucion();
@@ -150,39 +149,39 @@ public class Sistema {
             
         
             if(instruccion.getTipo() == "Pedir"){
-                Boolean disponible = solicitarRecurso(instruccion.getRecurso(), proceso);
                 if(!solicitudPermisosRecursos(proceso.getPropiedad(), proceso.getPrograma())){//si no tiene permisos, 
-                    System.out.println("el proceso " + proceso +" del usuario "+ proceso.getPropiedad().getNombre() + " y solicitó acceso al recurso " + instruccion.getRecurso() + " fue denegado por falta de permisos, se corta la ejecución del proceso. ");
+                    consola.PrintDenegacionRecurso(proceso, proceso.getPropiedad().getNombre(), instruccion.getRecurso());
+                    
                     this.getProcesosFinalizados().add(proceso);
                     this.getProcesosListos().remove(proceso);
                     return;
-                }
-                if(!disponible){
-                    System.out.println("El proceso " + proceso + " no pudo completar la tarea " + 
-                        instruccion + " porque el recurso se encuentra en uso.");
-                    proceso.setEstado(0);
-                    proceso.setPosicionEjecucion(posicion);
-                    this.getProcesosBloqueados().add(proceso);
-                    this.getProcesosListos().remove(proceso);
-
-                    return;
                 } else {
-                    System.out.println(instruccion.getMensaje());
+                    Boolean disponible = solicitarRecurso(instruccion.getRecurso(), proceso);
+                    if(!disponible){
+                        consola.PrintRecursoEnUso(proceso, instruccion);
+                        
+                        proceso.setEstado(0);
+                        proceso.setPosicionEjecucion(posicion);
+                        this.getProcesosBloqueados().add(proceso);
+                        this.getProcesosListos().remove(proceso);
+    
+                        return;
+                    } else {
+                        consola.PrintMensajeInstruccion(instruccion.getMensaje());
+                    }
                 }
                     
             }else if(proceso.getRecursoEnUso() != null && proceso.getRecursoEnUso().equals(instruccion.getRecurso())){
                  if(instruccion.getTipo() == "Devolver"){ //si se libera un recurso
                     devolverRecurso(proceso);
-                    System.out.println(instruccion); 
-                    //le pregunte a caffa si es solo mover el primero de la lista de bloqueados que tenga ese recurso, a la lista de listos o todos los que lo tengan 
+                    consola.PrintMensajeInstruccion(instruccion.getMensaje());  
                     
                     desbloquearProcesos();
                 }else{
-                    System.out.println(instruccion);
+                    consola.PrintMensajeInstruccion(instruccion.getMensaje());
                 }
             } else {
-                System.out.println("El proceso " + proceso + " intento utilizar el recurso (" + instruccion.getRecurso() + ") sin solicitarlo previamente.");
-
+                consola.PrintFaltaSolicitudRecurso(proceso, instruccion.getRecurso());
             }
             
         
@@ -190,7 +189,8 @@ public class Sistema {
         }
         
         if(tiempo > Quantum){ //se fue por timeout
-            System.out.println("\nProceso "+ proceso +" perdio CPU por timeOut en posicion "+ proceso.getPosicionEjecucion() + "\n");
+            consola.PrintFaltaCpu(proceso);
+
             //lo elimina de la primer posicion de los listos y lo agrega en la ultima 
             this.getProcesosListos().remove(0); //que solo elimine uno
 
@@ -199,8 +199,9 @@ public class Sistema {
             int ultimoIndex = getUltimoIndex(this.getProcesosListos());
             this.getProcesosListos().add(ultimoIndex, proceso); //lo agrega ultimo, pero con menos instrucciones.
             
-        }else{  //logro hacer todas las instrucciones
-            System.out.println( "\n Proceso "+ proceso +" se ejecuto completamente. \n");
+        }else{  //logro hacer todas las instruccionesc
+            consola.PrintEjecucionExitosa(proceso);
+            
             finalizarProceso(proceso);
         }
     }   
@@ -261,81 +262,5 @@ public class Sistema {
                 getProcesosBloqueados().remove(proceso);
             }
         }
-        
     }
-    /*
-   private final int Quantum = 15;
-   
-   public void CorrerProcesos(){
-       while(!procesos.isEmpty()){
-           int posicion = 0;
-           if(procesos.get(posicion).getEstado() == 3){
-               Proceso proceso = procesos.get(posicion);
-               proceso.setEstado(1);
-               Boolean finalizo = CorrerPrograma(proceso);
-               if(finalizo){
-                   FinalizarProceso(proceso);
-               } else {
-                   proceso.setEstado(0);
-                   
-               }
-           }
-           if(procesos.size() == posicion+1){
-               posicion = 0;
-           } else {
-               posicion++;
-           }
-           if(posicion == 0){
-               desbloquearProcesos();
-           }
-       }
-   }
-   
-   public boolean solicitudEjecutarPrograma(Usuario unUsuario, Programa unPrograma){
-        //1. se chequea en matriz de Usuario-Programa (si el usuario puede usar ese programa)
-        //2. se chequea en matriz Usuario-recursos (si el usuario puede usar todos los recursos que estan en ese programa)
-        
-        boolean puedeCrear = true;
-        return puedeCrear;        
-    }
-   
-   
-
-
-    private Boolean CorrerPrograma(Proceso proceso) {
-        int tiempo = 0;
-        Programa programa = proceso.getPrograma();
-        List<Instruccion> instrucciones = programa.getEjecucionesPendientes();
-        Iterator<Instruccion> it = instrucciones.iterator();
-        while(it.hasNext() && tiempo >= this.Quantum){
-            Instruccion instruccion = it.next();
-            tiempo += instruccion.getTiempo();
-            
-            //Validar el uso de recursos en la matriz
-            
-            if(instruccion.getRecurso() != null){
-                Boolean disponible = SolicitarRecurso(instruccion.getRecurso());
-                if(!disponible){
-                    return false;
-                }
-            }
-            //Validar el uso de recursos en la matriz
-            
-            
-            //Falta seguirlo creo
-        }
-        if(programa.getEjecucionesPendientes().isEmpty()){
-            return true;
-        }
-        else {
-            return false;
-        }
-        
-    }
-
-    
-    */
-
-    
-   
 }

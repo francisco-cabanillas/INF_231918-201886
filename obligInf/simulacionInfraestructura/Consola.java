@@ -2,6 +2,10 @@ package simulacionInfraestructura;
 
 import java.util.Scanner;
 
+import Dominio.Instruccion;
+import Dominio.Proceso;
+import Dominio.Recurso;
+
 public class Consola {
     private Scanner in = new Scanner(System.in); 
 
@@ -17,7 +21,7 @@ public class Consola {
         
         System.out.println("------ Menu ------");
         System.out.println("Opcion 1: Correr demo");
-        System.out.println("Opcion 2: Ingresar datos y correrlos");
+        System.out.println("Opcion 2: Ingresar 3 recursos y el Quantum total para correrlos en la demo");
         System.out.println("Opcion 3: Finalizar");
 
         int retorno = 0;
@@ -25,7 +29,7 @@ public class Consola {
         boolean ingresoCorrecto = false;
         while(!ingresoCorrecto){
             try{
-                retorno = in.nextInt();;
+                retorno = in.nextInt();
                 if(retorno == 1 || retorno == 2 || retorno == 3){
                     ingresoCorrecto = true;
                 } else {
@@ -34,10 +38,96 @@ public class Consola {
             }
             catch(Exception e){
                 System.out.print("Vuelva a ingresar su opcion (1/2/3): ");
+                retorno = 0;
             }
         }
 
         return retorno;
     }
 
+    public Recurso PedirRecurso(int numRecurso){
+        String nombre = "";
+        boolean ingresoCorrecto = false;
+
+        while(!ingresoCorrecto){
+            System.out.print("Ingrese el nombre del recurso " + numRecurso + "/3: ");
+            nombre = in.next();
+            if(!nombre.equals("") && !nombre.equals(" ")) {
+                ingresoCorrecto = true;
+                System.out.println("\n El recurso '" + nombre + "' fue añadido exitosamente.\n");
+            } else {
+                System.out.println("\n El nombre del recurso no puede ser vacio. \n");
+            }
+        }
+        Recurso retorno = new Recurso(nombre, numRecurso-1);
+
+        return retorno;
+    }
+
+    
+	public int PedirQuantum() {
+        int quantum = 0;
+        boolean ingresoCorrecto = false;
+        
+        System.out.print("Ingrese un valor para representar el quantum (ciclo total por proceso): ");
+
+        while(!ingresoCorrecto){
+            try{
+                quantum = in.nextInt();
+                if(quantum >= 0){
+                    ingresoCorrecto = true;
+                } else {
+                    System.out.print("Vuelva a ingresar su opcion con un valor positivo: ");
+                }
+            }
+            catch(Exception e){
+                System.out.print("Vuelva a ingresar su opcion con un valor numerico: ");
+                quantum = 0;
+            }
+        }
+
+        return quantum;
+	}
+
+	public void Print(String string) {
+        System.out.println("\n" + string);
+	}
+
+	public void PrintSizeProcesos(int listos, int finalizados, int bloqueados) {
+        Print("-- El array procesos listos tiene " + listos + " procesos. --");
+        Print("-- El array procesos finalizados tiene " + finalizados + " procesos. --");
+        Print("-- El array procesos bloqueados quedo con " + bloqueados + " procesos. --\n");
+	}
+
+	public void PrintDenegacionEjecucion(int idPrograma, String nombreUsuario) {
+        Print("ALERTA: Se denegó la ejecucion del programa " + idPrograma + " por parte del usuario "+ nombreUsuario);
+	}
+
+	public void PrintCorrerPrograma(Proceso proceso) {
+        Print("--- Correr programa de proceso " + proceso + " ---");
+	}
+
+	public void PrintRecursoEnUso(Proceso proceso, Instruccion instruccion) {
+        Print("ALERTA: El proceso " + proceso + " no pudo completar la tarea " + instruccion + " porque el recurso se encuentra en uso.");
+	}
+
+	public void PrintMensajeInstruccion(String mensaje) {
+        Print(mensaje);
+	}
+
+	public void PrintDenegacionRecurso(Proceso proceso, String nombreUsuario, Recurso recurso) {
+        Print("ACCESO DENEGADO: El proceso " + proceso +" del usuario "+ nombreUsuario + " solicitó acceso al recurso " + recurso + " fue denegado por falta de permisos, se corta la ejecución del proceso. ");
+	}
+
+	public void PrintFaltaSolicitudRecurso(Proceso proceso, Recurso recurso) {
+        Print("ERROR: El proceso " + proceso + " intento utilizar el recurso (" + recurso + ") sin solicitarlo previamente.");
+	}
+
+	public void PrintFaltaCpu(Proceso proceso) {
+        Print("\nProceso "+ proceso +" perdio CPU por timeOut en posicion " +  proceso.getPosicionEjecucion() + "\n");
+	}
+
+	public void PrintEjecucionExitosa(Proceso proceso) {
+        Print("\n Proceso "+ proceso +" se ejecuto completamente. \n");
+	}
 }
