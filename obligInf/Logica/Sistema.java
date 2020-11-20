@@ -149,25 +149,26 @@ public class Sistema {
             
         
             if(instruccion.getTipo() == "Pedir"){
-                Boolean disponible = solicitarRecurso(instruccion.getRecurso(), proceso);
                 if(!solicitudPermisosRecursos(proceso.getPropiedad(), proceso.getPrograma())){//si no tiene permisos, 
                     consola.PrintDenegacionRecurso(proceso, proceso.getPropiedad().getNombre(), instruccion.getRecurso());
                     
                     this.getProcesosFinalizados().add(proceso);
                     this.getProcesosListos().remove(proceso);
                     return;
-                }
-                if(!disponible){
-                    consola.PrintRecursoEnUso(proceso, instruccion);
-                    
-                    proceso.setEstado(0);
-                    proceso.setPosicionEjecucion(posicion);
-                    this.getProcesosBloqueados().add(proceso);
-                    this.getProcesosListos().remove(proceso);
-
-                    return;
                 } else {
-                    consola.PrintMensajeInstruccion(instruccion.getMensaje());
+                    Boolean disponible = solicitarRecurso(instruccion.getRecurso(), proceso);
+                    if(!disponible){
+                        consola.PrintRecursoEnUso(proceso, instruccion);
+                        
+                        proceso.setEstado(0);
+                        proceso.setPosicionEjecucion(posicion);
+                        this.getProcesosBloqueados().add(proceso);
+                        this.getProcesosListos().remove(proceso);
+    
+                        return;
+                    } else {
+                        consola.PrintMensajeInstruccion(instruccion.getMensaje());
+                    }
                 }
                     
             }else if(proceso.getRecursoEnUso() != null && proceso.getRecursoEnUso().equals(instruccion.getRecurso())){

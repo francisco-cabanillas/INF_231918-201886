@@ -119,6 +119,10 @@ public class SimulacionInfraestructura {
         Programa programa2 = new Programa();
         Programa programa3 = new Programa();
 
+        programa1.setId(1);
+        programa2.setId(2);
+        programa3.setId(3);
+
         //Agrega instrucciones al programa
         programa1.getInstrucciones().add(C); //uso impresora
         programa1.getInstrucciones().add(E); //uso calculadora
@@ -150,7 +154,9 @@ public class SimulacionInfraestructura {
         programa3.getInstrucciones().add(H); //uso pantalla
         programa3.getInstrucciones().add(I); //devuelvo pantalla
 
-        
+        sis.getProgramas().add(programa1);
+        sis.getProgramas().add(programa2);
+        sis.getProgramas().add(programa3);
 
         
 
@@ -159,20 +165,37 @@ public class SimulacionInfraestructura {
         /* VERSION 3…………… multiplicidad de usuarios. Todos los programas tienen permiso de ejecución.  Sólo usamos la matriz de permisos usuarios contra recursos */
 
         //Crear matriz Usuarios-Recursos
-        int permisosRecursos[][] = new int[sis.getUsuarios().size()][sis.getRecursos().size()];
+        if(quantum == 15){
+            int permisosRecursos[][] = new int[sis.getUsuarios().size()][sis.getRecursos().size()];
 
-        //Filas usuarios, columnas recursos
-        permisosRecursos[0][0] = 0; //fila 0 = usuario 1. //col 0 = recurso =
-        permisosRecursos[0][1] = 1; //fila 0 = usuario 0. //col 1 = recurso 1
-        permisosRecursos[0][2] = 0;
-        permisosRecursos[1][0] = 1;
-        permisosRecursos[1][1] = 0;
-        permisosRecursos[1][2] = 1;
-        permisosRecursos[2][0] = 0;
-        permisosRecursos[2][1] = 0;
-        permisosRecursos[2][2] = 1;
+            //Filas usuarios, columnas recursos
+            permisosRecursos[0][0] = 0; //fila 0 = usuario 1. //col 0 = recurso =
+            permisosRecursos[0][1] = 1; //fila 0 = usuario 0. //col 1 = recurso 1
+            permisosRecursos[0][2] = 0;
+            permisosRecursos[1][0] = 1;
+            permisosRecursos[1][1] = 0;
+            permisosRecursos[1][2] = 1;
+            permisosRecursos[2][0] = 0;
+            permisosRecursos[2][1] = 0;
+            permisosRecursos[2][2] = 1;
 
-        sis.setPermisosRecursos(permisosRecursos);
+            sis.setPermisosRecursos(permisosRecursos);
+        } else { //Si la prueba es con datos del usuario se asume permiso total sobre ellos
+            int permisosRecursos[][] = new int[sis.getUsuarios().size()][sis.getRecursos().size()];
+
+            //Filas usuarios, columnas recursos
+            permisosRecursos[0][0] = 1; //fila 0 = usuario 1. //col 0 = recurso =
+            permisosRecursos[0][1] = 1; //fila 0 = usuario 0. //col 1 = recurso 1
+            permisosRecursos[0][2] = 1;
+            permisosRecursos[1][0] = 1;
+            permisosRecursos[1][1] = 1;
+            permisosRecursos[1][2] = 1;
+            permisosRecursos[2][0] = 1;
+            permisosRecursos[2][1] = 1;
+            permisosRecursos[2][2] = 1;
+
+            sis.setPermisosRecursos(permisosRecursos);
+        }
 
         ///////////////////////////////////////////////////// VERSION 4 /////////////////////////////////////////////////////
 
@@ -182,15 +205,15 @@ public class SimulacionInfraestructura {
         int permisosProgramas[][] = new int[sis.getUsuarios().size()][sis.getProgramas().size()];
 
         //Filas usuarios, Columnas recursos
-        permisosRecursos[0][0] = 0; //fila 0 = usuario 1. //col 0 = programa 0
-        permisosRecursos[0][1] = 1; //fila 0 = usuario 0. //col 1 = programa 1
-        permisosRecursos[0][2] = 0;
-        permisosRecursos[1][0] = 1;
-        permisosRecursos[1][1] = 0;
-        permisosRecursos[1][2] = 1;
-        permisosRecursos[2][0] = 0;
-        permisosRecursos[2][1] = 0;
-        permisosRecursos[2][2] = 1;
+        permisosProgramas[0][0] = 0; //fila 0 = usuario 1. //col 0 = programa 0
+        permisosProgramas[0][1] = 1; //fila 0 = usuario 0. //col 1 = programa 1
+        permisosProgramas[0][2] = 0;
+        permisosProgramas[1][0] = 1;
+        permisosProgramas[1][1] = 0;
+        permisosProgramas[1][2] = 1;
+        permisosProgramas[2][0] = 0;
+        permisosProgramas[2][1] = 0;
+        permisosProgramas[2][2] = 1;
 
         sis.setPermisosProgramas(permisosProgramas);
 

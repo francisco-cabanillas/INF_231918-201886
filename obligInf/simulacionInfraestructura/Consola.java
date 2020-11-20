@@ -116,7 +116,7 @@ public class Consola {
 	}
 
 	public void PrintDenegacionRecurso(Proceso proceso, String nombreUsuario, Recurso recurso) {
-        Print("ACCESO DENEGADO: El proceso " + proceso +" del usuario "+ nombreUsuario + " y solicitó acceso al recurso " + recurso + " fue denegado por falta de permisos, se corta la ejecución del proceso. ");
+        Print("ACCESO DENEGADO: El proceso " + proceso +" del usuario "+ nombreUsuario + " solicitó acceso al recurso " + recurso + " fue denegado por falta de permisos, se corta la ejecución del proceso. ");
 	}
 
 	public void PrintFaltaSolicitudRecurso(Proceso proceso, Recurso recurso) {
