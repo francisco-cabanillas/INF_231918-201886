@@ -182,19 +182,9 @@ public class SimulacionInfraestructura {
             sis.setPermisosRecursos(permisosRecursos);
         } else { //Si la prueba es con datos del usuario se asume permiso total sobre ellos
             int permisosRecursos[][] = new int[sis.getUsuarios().size()][sis.getRecursos().size()];
-
-            //Filas usuarios, columnas recursos
-            permisosRecursos[0][0] = 1; //fila 0 = usuario 1. //col 0 = recurso =
-            permisosRecursos[0][1] = 1; //fila 0 = usuario 0. //col 1 = recurso 1
-            permisosRecursos[0][2] = 1;
-            permisosRecursos[1][0] = 1;
-            permisosRecursos[1][1] = 1;
-            permisosRecursos[1][2] = 1;
-            permisosRecursos[2][0] = 1;
-            permisosRecursos[2][1] = 1;
-            permisosRecursos[2][2] = 1;
-
+            permisosRecursos = consola.PedirPermisos(permisosRecursos, sis);
             sis.setPermisosRecursos(permisosRecursos);
+            
         }
 
         ///////////////////////////////////////////////////// VERSION 4 /////////////////////////////////////////////////////

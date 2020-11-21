@@ -5,6 +5,7 @@ import java.util.Scanner;
 import Dominio.Instruccion;
 import Dominio.Proceso;
 import Dominio.Recurso;
+import Logica.Sistema;
 
 public class Consola {
     private Scanner in = new Scanner(System.in); 
@@ -64,12 +65,38 @@ public class Consola {
         return retorno;
     }
 
+    public int[][] PedirPermisos(int[][] matrizPermisos, Sistema sis){
+        int permiso = 0;
+        boolean ingresoCorrecto;
+        for(int i =0; i<matrizPermisos.length; i++){
+            for(int j=0; j<matrizPermisos[i].length; j++){
+                ingresoCorrecto = false;
+
+                while(!ingresoCorrecto){
+                    System.out.print("Ingrese 1 o 0 para darle permisos al usuario " + sis.getUsuarios().get(i) + " sobre el recurso " + sis.getRecursos().get(j)+ ":  ");                
+                    permiso = in.nextInt();
+                    if(permiso == 0 || permiso == 1) {
+                        ingresoCorrecto = true;
+                        
+                    } else {
+                        System.out.println("\n Permiso incorrecto, solo valores 1 o 0 \n");
+                    }
+                }
+  
+                matrizPermisos[i][j] = permiso;
+            }
+        }
+        System.out.println("\n Permisos agregados exitosamente. \n");
+        return matrizPermisos;
+        
+    }
+    
     
 	public int PedirQuantum() {
         int quantum = 0;
         boolean ingresoCorrecto = false;
         
-        System.out.print("Ingrese un valor para representar el quantum (ciclo total por proceso): ");
+        System.out.print("Ingrese un valor para representar el quantum (ciclo total por proceso): \n ");
 
         while(!ingresoCorrecto){
             try{
