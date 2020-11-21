@@ -5,6 +5,7 @@ import java.util.Scanner;
 import Dominio.Instruccion;
 import Dominio.Proceso;
 import Dominio.Recurso;
+import Dominio.Usuario;
 import Logica.Sistema;
 
 public class Consola {
@@ -22,7 +23,7 @@ public class Consola {
         
         System.out.println("------ Menu ------");
         System.out.println("Opcion 1: Correr demo");
-        System.out.println("Opcion 2: Ingresar 3 recursos y el Quantum total para correrlos en la demo");
+        System.out.println("Opcion 2: Ingresar 3 recursos, 3 usuarios y el Quantum total para correr en la demo");
         System.out.println("Opcion 3: Finalizar");
 
         int retorno = 0;
@@ -46,23 +47,21 @@ public class Consola {
         return retorno;
     }
 
-    public Recurso PedirRecurso(int numRecurso){
+    public String PedirDato(int numDato, String tipo){
         String nombre = "";
         boolean ingresoCorrecto = false;
 
         while(!ingresoCorrecto){
-            System.out.print("Ingrese el nombre del recurso " + numRecurso + "/3: ");
+            System.out.print("Ingrese el nombre del " + tipo + " " + numDato + "/3: ");
             nombre = in.next();
             if(!nombre.equals("") && !nombre.equals(" ")) {
                 ingresoCorrecto = true;
-                System.out.println("\n El recurso '" + nombre + "' fue añadido exitosamente.\n");
+                System.out.println("\n El " + tipo + " '" + nombre + "' fue añadido exitosamente.\n");
             } else {
-                System.out.println("\n El nombre del recurso no puede ser vacio. \n");
+                System.out.println("\n El nombre del " + tipo + " no puede ser vacio. \n");
             }
         }
-        Recurso retorno = new Recurso(nombre, numRecurso-1);
-
-        return retorno;
+        return nombre;
     }
 
     public int[][] PedirPermisos(int[][] matrizPermisos, Sistema sis){
@@ -88,7 +87,6 @@ public class Consola {
         }
         System.out.println("\n Permisos agregados exitosamente. \n");
         return matrizPermisos;
-        
     }
     
     
