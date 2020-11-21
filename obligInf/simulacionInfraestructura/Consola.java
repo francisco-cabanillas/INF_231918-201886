@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 import Dominio.Instruccion;
 import Dominio.Proceso;
+import Dominio.Programa;
 import Dominio.Recurso;
 import Dominio.Usuario;
 import Logica.Sistema;
@@ -12,7 +13,7 @@ public class Consola {
     private Scanner in = new Scanner(System.in); 
 
     public void PrintInicial(){
-        System.out.println("Simulacion Obligatorio Infraestructura\n");
+        System.out.println("\n---- Simulacion Obligatorio Infraestructura ----\n");
     }
 
     public void PrintFinal(){
@@ -52,7 +53,7 @@ public class Consola {
         boolean ingresoCorrecto = false;
 
         while(!ingresoCorrecto){
-            System.out.print("Ingrese el nombre del " + tipo + " " + numDato + "/3: ");
+            System.out.print("\nIngrese el nombre del " + tipo + " " + numDato + "/3: ");
             nombre = in.next();
             if(!nombre.equals("") && !nombre.equals(" ")) {
                 ingresoCorrecto = true;
@@ -72,7 +73,7 @@ public class Consola {
                 ingresoCorrecto = false;
 
                 while(!ingresoCorrecto){
-                    System.out.print("Ingrese 1 o 0 para darle permisos al usuario " + sis.getUsuarios().get(i) + " sobre el recurso " + sis.getRecursos().get(j)+ ":  ");                
+                    System.out.print("\nIngrese 1 o 0 para darle permisos al usuario " + sis.getUsuarios().get(i) + " sobre el recurso " + sis.getRecursos().get(j)+ ":  ");                
                     permiso = in.nextInt();
                     if(permiso == 0 || permiso == 1) {
                         ingresoCorrecto = true;
@@ -94,7 +95,7 @@ public class Consola {
         int quantum = 0;
         boolean ingresoCorrecto = false;
         
-        System.out.print("Ingrese un valor para representar el quantum (ciclo total por proceso): \n ");
+        System.out.print("Ingrese un valor para representar el quantum (ciclo total por proceso): ");
 
         while(!ingresoCorrecto){
             try{
@@ -125,7 +126,7 @@ public class Consola {
 	}
 
 	public void PrintDenegacionEjecucion(int idPrograma, String nombreUsuario) {
-        Print("ALERTA: Se denegó la ejecucion del programa " + idPrograma + " por parte del usuario "+ nombreUsuario);
+        Print("ACCESO DENEGADO: El usuario " + nombreUsuario + " solicito usar el programa " + idPrograma + " y no cuenta con los permisos necesarios.");
 	}
 
 	public void PrintCorrerPrograma(Proceso proceso) {
@@ -141,7 +142,7 @@ public class Consola {
 	}
 
 	public void PrintDenegacionRecurso(Proceso proceso, String nombreUsuario, Recurso recurso) {
-        Print("ACCESO DENEGADO: El proceso " + proceso +" del usuario "+ nombreUsuario + " solicitó acceso al recurso " + recurso + " fue denegado por falta de permisos, se corta la ejecución del proceso. ");
+        Print("ACCESO DENEGADO: El proceso " + proceso +" del usuario "+ nombreUsuario + " solicitó acceso al recurso " + recurso + " y fue denegado por falta de permisos, se corta la ejecución del proceso. ");
 	}
 
 	public void PrintFaltaSolicitudRecurso(Proceso proceso, Recurso recurso) {

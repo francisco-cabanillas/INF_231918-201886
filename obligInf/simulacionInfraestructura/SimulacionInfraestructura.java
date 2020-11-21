@@ -2,8 +2,6 @@ package simulacionInfraestructura;
 
 import Logica.Sistema;
 
-import java.util.List;
-
 import Dominio.Instruccion;
 import Dominio.Usuario;
 import Dominio.Programa;
@@ -240,21 +238,39 @@ public class SimulacionInfraestructura {
         //Crear los procesos validando permisos
     
         if(sis.solicitudEjecutarPrograma(usuarios[0], programa1)){
-            Proceso proc1 = new Proceso(usuarios[0], programa1);
-            proc1.setNumero(1);
-            sis.getProcesosListos().add(proc1);
+            Proceso proceso1 = new Proceso(usuarios[0], programa1);
+            proceso1.setNumero(1);
+            sis.getProcesosListos().add(proceso1);
         }
 
         if(sis.solicitudEjecutarPrograma(usuarios[1], programa2)){
-            Proceso proc2 = new Proceso(usuarios[1], programa2);
-            proc2.setNumero(2);
-            sis.getProcesosListos().add(proc2);
+            Proceso proceso2 = new Proceso(usuarios[1], programa2);
+            proceso2.setNumero(2);
+            sis.getProcesosListos().add(proceso2);
         }
 
         if(sis.solicitudEjecutarPrograma(usuarios[2], programa3)){
-            Proceso proc3 = new Proceso(usuarios[2], programa3);
-            proc3.setNumero(3);
-            sis.getProcesosListos().add(proc3);
+            Proceso proceso3 = new Proceso(usuarios[2], programa3);
+            proceso3.setNumero(3);
+            sis.getProcesosListos().add(proceso3);
+        }
+
+        if(sis.solicitudEjecutarPrograma(usuarios[1], programa1)){
+            Proceso proceso4 = new Proceso(usuarios[1], programa1);
+            proceso4.setNumero(4);
+            sis.getProcesosListos().add(proceso4);
+        }
+
+        if(sis.solicitudEjecutarPrograma(usuarios[2], programa2)){
+            Proceso proceso5 = new Proceso(usuarios[2], programa2);
+            proceso5.setNumero(5);
+            sis.getProcesosListos().add(proceso5);
+        }
+
+        if(sis.solicitudEjecutarPrograma(usuarios[0], programa3)){
+            Proceso proceso6 = new Proceso(usuarios[0], programa3);
+            proceso6.setNumero(6);
+            sis.getProcesosListos().add(proceso6);
         }
 
         sis.correrProcesos(quantum);
