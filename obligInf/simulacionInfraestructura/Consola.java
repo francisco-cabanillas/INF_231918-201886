@@ -5,6 +5,8 @@ import java.util.Scanner;
 import Dominio.Instruccion;
 import Dominio.Proceso;
 import Dominio.Recurso;
+import Dominio.Usuario;
+import Logica.Sistema;
 
 public class Consola {
     private Scanner in = new Scanner(System.in); 
@@ -21,7 +23,7 @@ public class Consola {
         
         System.out.println("------ Menu ------");
         System.out.println("Opcion 1: Correr demo");
-        System.out.println("Opcion 2: Ingresar 3 recursos y el Quantum total para correrlos en la demo");
+        System.out.println("Opcion 2: Ingresar 3 recursos, 3 usuarios y el Quantum total para correr en la demo");
         System.out.println("Opcion 3: Finalizar");
 
         int retorno = 0;
@@ -45,31 +47,54 @@ public class Consola {
         return retorno;
     }
 
-    public Recurso PedirRecurso(int numRecurso){
+    public String PedirDato(int numDato, String tipo){
         String nombre = "";
         boolean ingresoCorrecto = false;
 
         while(!ingresoCorrecto){
-            System.out.print("Ingrese el nombre del recurso " + numRecurso + "/3: ");
+            System.out.print("Ingrese el nombre del " + tipo + " " + numDato + "/3: ");
             nombre = in.next();
             if(!nombre.equals("") && !nombre.equals(" ")) {
                 ingresoCorrecto = true;
-                System.out.println("\n El recurso '" + nombre + "' fue añadido exitosamente.\n");
+                System.out.println("\n El " + tipo + " '" + nombre + "' fue añadido exitosamente.\n");
             } else {
-                System.out.println("\n El nombre del recurso no puede ser vacio. \n");
+                System.out.println("\n El nombre del " + tipo + " no puede ser vacio. \n");
             }
         }
-        Recurso retorno = new Recurso(nombre, numRecurso-1);
-
-        return retorno;
+        return nombre;
     }
 
+    public int[][] PedirPermisos(int[][] matrizPermisos, Sistema sis){
+        int permiso = 0;
+        boolean ingresoCorrecto;
+        for(int i =0; i<matrizPermisos.length; i++){
+            for(int j=0; j<matrizPermisos[i].length; j++){
+                ingresoCorrecto = false;
+
+                while(!ingresoCorrecto){
+                    System.out.print("Ingrese 1 o 0 para darle permisos al usuario " + sis.getUsuarios().get(i) + " sobre el recurso " + sis.getRecursos().get(j)+ ":  ");                
+                    permiso = in.nextInt();
+                    if(permiso == 0 || permiso == 1) {
+                        ingresoCorrecto = true;
+                        
+                    } else {
+                        System.out.println("\n Permiso incorrecto, solo valores 1 o 0 \n");
+                    }
+                }
+  
+                matrizPermisos[i][j] = permiso;
+            }
+        }
+        System.out.println("\n Permisos agregados exitosamente. \n");
+        return matrizPermisos;
+    }
+    
     
 	public int PedirQuantum() {
         int quantum = 0;
         boolean ingresoCorrecto = false;
         
-        System.out.print("Ingrese un valor para representar el quantum (ciclo total por proceso): ");
+        System.out.print("Ingrese un valor para representar el quantum (ciclo total por proceso): \n ");
 
         while(!ingresoCorrecto){
             try{
